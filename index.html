@@ -17,11 +17,10 @@
       min-height: 100vh;
       color: #00f0ff;
       background: linear-gradient(135deg, #0d001a 0%, #1a0033 50%, #2a004d 100%);
-      overflow: hidden; /* убираем любой скролл */
+      overflow: hidden;
       position: relative;
     }
 
-    /* Лёгкий glitch-фон */
     body::before {
       content: "";
       position: absolute;
@@ -51,7 +50,6 @@
       flex-direction: column;
     }
 
-    /* Переключатель языка */
     .lang-switch {
       position: absolute;
       top: 10px;
@@ -71,13 +69,12 @@
       letter-spacing: 1.5px;
     }
 
-    /* Сетка кнопок: 2 столбца × 4 ряда */
     .buttons-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      flex: 1; /* растягивает на всю оставшуюся высоту */
-      align-content: center; /* центрирует по вертикали */
+      flex: 1;
+      align-content: center;
     }
 
     .btn {
@@ -134,15 +131,15 @@
     <div class="title">Main Menu</div>
 
     <div class="buttons-grid">
-      <div class="btn" onclick="alert('В разработке — Открыть Чат')">
+      <div class="btn" onclick="alert('В разработке — Алиса Smartcat A.I.')">
         <span class="emoji">💬</span>
-        Открыть Чат
-        <span class="subtitle">Текстовая версия</span>
+        Алиса Smartcat A.I.
+        <span class="subtitle">Текстовый чат</span>
       </div>
 
-      <div class="btn" onclick="alert('В разработке — Функции')">
+      <div class="btn" onclick="alert('В разработке — Возможности ИИ')">
         <span class="emoji">⚙️</span>
-        Функции
+        Возможности ИИ
         <span class="subtitle">Генерация, скачивание...</span>
       </div>
 
@@ -164,9 +161,9 @@
         <span class="subtitle">Поиграй с Алисой</span>
       </div>
 
-      <div class="btn" onclick="alert('В разработке — Заказать бота')">
+      <div class="btn" onclick="alert('В разработке — ИИ боты на заказ')">
         <span class="emoji">🤖</span>
-        Заказать бота
+        ИИ боты на заказ
         <span class="subtitle">Создадим твоего</span>
       </div>
 
@@ -185,12 +182,10 @@
   </div>
 
   <script>
-    // Инициализация Telegram WebApp
     Telegram.WebApp.ready();
-    Telegram.WebApp.expand(); // полный экран
-    Telegram.WebApp.MainButton.hide(); // скрываем основную кнопку Telegram, если не нужна
+    Telegram.WebApp.expand();
+    Telegram.WebApp.MainButton.hide();
 
-    // Пока заглушка для языка
     document.querySelector('.lang-switch').addEventListener('click', () => {
       alert('Переключение языка в разработке');
     });
