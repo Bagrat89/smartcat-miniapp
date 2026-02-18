@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartCat Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      color: #00f0ff;
+      background: linear-gradient(135deg, #0d001a 0%, #1a0033 50%, #2a004d 100%);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Неоновый glitch-фон */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,0,170,0.03) 10px,
+        rgba(255,0,170,0.03) 20px
+      );
+      pointer-events: none;
+      opacity: 0.3;
+      animation: glitch-bg 12s infinite linear;
+    }
+
+    @keyframes glitch-bg {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Переключатель языка */
+    .lang-switch {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 11px;
+      color: #88ffff;
+      opacity: 0.7;
+      user-select: none;
+      cursor: default;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 28px;
+      margin: 40px 0 30px;
+      text-shadow: 0 0 20px #00f0ff, 0 0 40px #ff00aa;
+      letter-spacing: 2px;
+    }
+
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 0 auto;
+      max-width: 420px;
+    }
+
+    .btn {
+      background: rgba(26, 13, 46, 0.7);
+      border: 1px solid #00f0ff33;
+      border-radius: 16px;
+      padding: 18px 12px;
+      color: #00f0ff;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.45);
+      border-color: #ff00aa;
+    }
+
+    .btn .emoji {
+      font-size: 32px;
+      margin-bottom: 4px;
+    }
+
+    .btn .subtitle {
+      font-size: 12px;
+      opacity: 0.7;
+      color: #88ffff;
+    }
+
+    /* Кошка внизу */
+    .cyber-cat {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      opacity: 0.45;
+      pointer-events: none;
+      filter: drop-shadow(0 0 40px #00f0ff);
+      z-index: 1;
+    }
+
+    @media (max-width: 500px) {
+      .buttons-grid {
+        grid-template-columns: 1fr;
+      }
+      .cyber-cat {
+        width: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lang-switch">ENG / RU</div>
+
+  <div class="container">
+    <div class="title">SmartCat</div>
+
+    <div class="buttons-grid">
+      <div class="btn" onclick="alert('В разработке — Открыть Чат')">
+        <span class="emoji">💬</span>
+        Открыть Чат
+        <span class="subtitle">Вернуться к текстовому режиму</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Функции')">
+        <span class="emoji">⚙️</span>
+        Функции
+        <span class="subtitle">Генерация, скачивание и многое другое</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Наши соцсети')">
+        <span class="emoji">🌐</span>
+        Наши соцсети
+        <span class="subtitle">Telegram, TikTok, Instagram</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Наши партнёры')">
+        <span class="emoji">🤝</span>
+        Наши партнёры
+        <span class="subtitle">Надёжные проекты</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Игра')">
+        <span class="emoji">🎮</span>
+        Игра
+        <span class="subtitle">Поиграй с Алисой!</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Заказать бота')">
+        <span class="emoji">🤖</span>
+        Заказать бота
+        <span class="subtitle">Создадим твоего помощника</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — ИИ стикеры')">
+        <span class="emoji">🖼️</span>
+        ИИ стикеры
+        <span class="subtitle">Наши крутые стикеры</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — На Кибервискас')">
+        <span class="emoji">💰</span>
+        На Кибервискас
+        <span class="subtitle">Поддержать проект</span>
+      </div>
+    </div>
+
+    <!-- Кошка внизу -->
+    <img src="assets/cyber-cat.png" alt="Cyber Cat" class="cyber-cat">
+  </div>
+
+  <script>
+    // Инициализация Telegram WebApp
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand(); // разворачиваем на весь экран
+
+    // Можно добавить будущую логику переключения языка
+    document.querySelector('.lang-switch').addEventListener('click', () => {
+      alert('Переключение языка в разработке');
+    });
+  </script>
+</body>
+</html>
