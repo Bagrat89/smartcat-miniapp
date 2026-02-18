@@ -21,42 +21,35 @@
       position: relative;
     }
 
-    /* Верхняя зона с картинкой — покрывает только сверху до кнопок */
-    .top-bg {
+    body::before {
+      content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 38vh;               /* высота верхней зоны — подбери под свою картинку (30–45vh обычно идеально) */
-      background: url('assets/cyber-cat.png') no-repeat center top;
-      background-size: cover;     /* картинка растягивается по ширине и высоте зоны */
-      background-position: center top; /* фокус на верхней части изображения */
-      z-index: 1;
-      pointer-events: none;       /* клики проходят сквозь картинку */
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent 0 10px,
+        rgba(255,0,170,0.02) 10px 20px
+      );
+      pointer-events: none;
+      opacity: 0.25;
+      animation: glitch-bg 15s infinite linear;
     }
 
-    /* Тёмный градиент поверх картинки, чтобы текст и кнопки были читаемыми */
-    .top-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 38vh;
-      background: linear-gradient(to bottom, rgba(13,0,26,0.75) 0%, rgba(13,0,26,0.95) 70%, transparent 100%);
-      z-index: 2;
-      pointer-events: none;
+    @keyframes glitch-bg {
+      0%, 100% { transform: translate(0); }
+      25% { transform: translate(-1px, 1px); }
+      50% { transform: translate(1px, -1px); }
     }
 
     .container {
       position: relative;
-      z-index: 3;                 /* весь контент поверх фона и оверлея */
+      z-index: 2;
       padding: 16px 12px;
       height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Переключатель языка */
     .lang-switch {
       position: absolute;
       top: 10px;
@@ -66,7 +59,6 @@
       opacity: 0.6;
       user-select: none;
       cursor: default;
-      z-index: 4;
     }
 
     .title {
@@ -75,7 +67,6 @@
       margin: 20px 0 24px;
       text-shadow: 0 0 15px #00f0ff, 0 0 30px #ff00aa;
       letter-spacing: 1.5px;
-      z-index: 4;
     }
 
     .buttons-grid {
@@ -129,7 +120,6 @@
       .btn { padding: 12px 8px; font-size: 13px; }
       .btn .emoji { font-size: 22px; }
       .btn .subtitle { font-size: 9px; }
-      .top-bg, .top-overlay { height: 32vh; } /* уменьшаем верхнюю зону на маленьких экранах */
     }
   </style>
 </head>
@@ -137,54 +127,54 @@
 
   <div class="lang-switch">ENG / RU</div>
 
-  <!-- Верхняя зона с картинкой -->
-  <div class="top-bg"></div>
-  <div class="top-overlay"></div>
-
   <div class="container">
     <div class="title">Main Menu</div>
 
     <div class="buttons-grid">
-      <div class="btn" onclick="alert('В разработке — Алиса Smartcat A.I.')">
+      <!-- 1-й ряд -->
+      <div class="btn" onclick="alert('В разработке — ИИ ассистент Алиса')">
         <span class="emoji">💬</span>
-        Алиса Smartcat A.I.
+        ИИ ассистент Алиса
         <span class="subtitle">Текстовый чат</span>
       </div>
 
-      <div class="btn" onclick="alert('В разработке — Возможности ИИ')">
+      <div class="btn" onclick="alert('В разработке — Особые функции')">
         <span class="emoji">⚙️</span>
-        Возможности ИИ
+        Особые функции
         <span class="subtitle">Генерация, скачивание...</span>
       </div>
 
+      <!-- 2-й ряд -->
+      <div class="btn" onclick="alert('В разработке — APK приложения')">
+        <span class="emoji">📱</span>
+        APK приложения
+        <span class="subtitle">Скачай наше приложение</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Веб игра')">
+        <span class="emoji">🎮</span>
+        Веб игра
+        <span class="subtitle">Поиграй с Алисой</span>
+      </div>
+
+      <!-- 3-й ряд -->
+      <div class="btn" onclick="alert('В разработке — Маркет')">
+        <span class="emoji">🛒</span>
+        Маркет
+        <span class="subtitle">Наши партнёры</span>
+      </div>
+
+      <div class="btn" onclick="alert('В разработке — Нейро-стикеры')">
+        <span class="emoji">🖼️</span>
+        Нейро-стикеры
+        <span class="subtitle">Наши крутые стикеры</span>
+      </div>
+
+      <!-- 4-й ряд -->
       <div class="btn" onclick="alert('В разработке — Наши соцсети')">
         <span class="emoji">🌐</span>
         Наши соцсети
         <span class="subtitle">Telegram, TikTok и др.</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — Наши партнёры')">
-        <span class="emoji">🤝</span>
-        Наши партнёры
-        <span class="subtitle">Надёжные проекты</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — Игра')">
-        <span class="emoji">🎮</span>
-        Игра
-        <span class="subtitle">Поиграй с Алисой</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — ИИ боты на заказ')">
-        <span class="emoji">🤖</span>
-        ИИ боты на заказ
-        <span class="subtitle">Создадим твоего</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — ИИ стикеры')">
-        <span class="emoji">🖼️</span>
-        ИИ стикеры
-        <span class="subtitle">Наши крутые стикеры</span>
       </div>
 
       <div class="btn" onclick="alert('В разработке — На Кибервискас')">
