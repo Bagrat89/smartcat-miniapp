@@ -6,12 +6,7 @@
   <title>Main Menu - SmartCat</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
@@ -25,20 +20,9 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent 0 10px,
-        rgba(255,0,170,0.02) 10px 20px
-      );
+      background: repeating-linear-gradient(45deg, transparent 0 10px, rgba(255,0,170,0.02) 10px 20px);
       pointer-events: none;
       opacity: 0.25;
-      animation: glitch-bg 15s infinite linear;
-    }
-
-    @keyframes glitch-bg {
-      0%, 100% { transform: translate(0); }
-      25% { transform: translate(-1px, 1px); }
-      50% { transform: translate(1px, -1px); }
     }
 
     .container {
@@ -78,7 +62,7 @@
     }
 
     .btn {
-      background: rgba(26, 13, 46, 0.65);
+      background: rgba(26,13,46,0.65);
       border: 1px solid #00f0ff22;
       border-radius: 12px;
       padding: 14px 10px;
@@ -87,7 +71,7 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.12);
+      box-shadow: 0 0 12px rgba(0,240,255,0.12);
       backdrop-filter: blur(5px);
       display: flex;
       flex-direction: column;
@@ -96,24 +80,17 @@
       gap: 4px;
     }
 
-    .btn:hover,
-    .btn:active {
+    .btn:hover, .btn:active {
       transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+      box-shadow: 0 0 25px rgba(0,240,255,0.4);
       border-color: #ff00aa66;
     }
 
-    .btn .emoji {
-      font-size: 26px;
-      margin-bottom: 2px;
-    }
+    .btn .emoji { font-size: 26px; margin-bottom: 2px; }
+    .btn .subtitle { font-size: 10px; opacity: 0.65; color: #88ffff; line-height: 1.1; }
 
-    .btn .subtitle {
-      font-size: 10px;
-      opacity: 0.65;
-      color: #88ffff;
-      line-height: 1.1;
-    }
+    .page { display: none; }
+    .page.active { display: flex; flex-direction: column; height: 100%; }
 
     @media (max-height: 600px) {
       .title { font-size: 20px; margin: 16px 0 20px; }
@@ -128,68 +105,171 @@
   <div class="lang-switch">ENG / RU</div>
 
   <div class="container">
-    <div class="title">Main Menu</div>
 
-    <div class="buttons-grid">
-      <!-- 1-й ряд -->
-      <div class="btn" onclick="alert('В разработке — ИИ ассистент Алиса')">
-        <span class="emoji">💬</span>
-        ИИ ассистент Алиса
-        <span class="subtitle">Текстовый чат</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — Особые функции')">
-        <span class="emoji">⚙️</span>
-        Особые функции
-        <span class="subtitle">Генерация, скачивание...</span>
-      </div>
-
-      <!-- 2-й ряд -->
-      <div class="btn" onclick="alert('В разработке — APK приложения')">
-        <span class="emoji">📱</span>
-        APK приложения
-        <span class="subtitle">Скачай наше приложение</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — Веб игра')">
-        <span class="emoji">🎮</span>
-        Веб игра
-        <span class="subtitle">Поиграй с Алисой</span>
-      </div>
-
-      <!-- 3-й ряд -->
-      <div class="btn" onclick="alert('В разработке — Маркет')">
-        <span class="emoji">🛒</span>
-        Маркет
-        <span class="subtitle">Наши партнёры</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — Нейро-стикеры')">
-        <span class="emoji">🖼️</span>
-        Нейро-стикеры
-        <span class="subtitle">Наши крутые стикеры</span>
-      </div>
-
-      <!-- 4-й ряд -->
-      <div class="btn" onclick="alert('В разработке — Наши соцсети')">
-        <span class="emoji">🌐</span>
-        Наши соцсети
-        <span class="subtitle">Telegram, TikTok и др.</span>
-      </div>
-
-      <div class="btn" onclick="alert('В разработке — На Кибервискас')">
-        <span class="emoji">💰</span>
-        На Кибервискас
-        <span class="subtitle">Поддержать проект</span>
+    <!-- Главное меню (page id="main") -->
+    <div id="main" class="page active">
+      <div class="title">Main Menu</div>
+      <div class="buttons-grid">
+        <div class="btn" data-action="go-to-assistant">
+          <span class="emoji">💬</span>
+          ИИ ассистент Алиса
+          <span class="subtitle">Текстовый чат</span>
+        </div>
+        <div class="btn" data-action="go-to-features">
+          <span class="emoji">⚙️</span>
+          Особые функции
+          <span class="subtitle">Генерация, скачивание...</span>
+        </div>
+        <div class="btn" data-action="go-to-apk">
+          <span class="emoji">📱</span>
+          APK приложения
+          <span class="subtitle">Скачай наше приложение</span>
+        </div>
+        <div class="btn" data-action="go-to-game">
+          <span class="emoji">🎮</span>
+          Веб игра
+          <span class="subtitle">Поиграй с Алисой</span>
+        </div>
+        <div class="btn" data-action="go-to-market">
+          <span class="emoji">🛒</span>
+          Маркет
+          <span class="subtitle">Наши партнёры</span>
+        </div>
+        <div class="btn" data-action="go-to-stickers">
+          <span class="emoji">🖼️</span>
+          Нейро-стикеры
+          <span class="subtitle">Наши крутые стикеры</span>
+        </div>
+        <div class="btn" data-action="go-to-socials">
+          <span class="emoji">🌐</span>
+          Наши соцсети
+          <span class="subtitle">Telegram, TikTok и др.</span>
+        </div>
+        <div class="btn" data-action="go-to-donate">
+          <span class="emoji">💰</span>
+          На Кибервискас
+          <span class="subtitle">Поддержать проект</span>
+        </div>
       </div>
     </div>
+
+    <!-- Особые функции -->
+    <div id="features" class="page">
+      <div class="title">Особые функции</div>
+      <div class="buttons-grid">
+        <div class="btn"><span class="emoji">🖼️</span>Генерация фото по тексту</div>
+        <div class="btn"><span class="emoji">🎥</span>Скачать видео с YouTube/TikTok</div>
+        <div class="btn"><span class="emoji">₿</span>Курс криптовалют</div>
+        <div class="btn"><span class="emoji">✂️</span>Фото редактор</div>
+        <div class="btn"><span class="emoji">🔍</span>Анализ картинки</div>
+        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+      </div>
+    </div>
+
+    <!-- Маркет -->
+    <div id="market" class="page">
+      <div class="title">Маркет</div>
+      <div class="buttons-grid">
+        <div class="btn" data-action="go-to-services"><span class="emoji">🛍️</span>Наши услуги</div>
+        <div class="btn" data-action="go-to-partners"><span class="emoji">🤝</span>Партнеры</div>
+        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+      </div>
+    </div>
+
+    <!-- Наши услуги -->
+    <div id="services" class="page">
+      <div class="title">Наши услуги</div>
+      <div class="buttons-grid">
+        <div class="btn"><span class="emoji">🤖</span>Алиса ИИ безлимит</div>
+        <div class="btn"><span class="emoji">🛠️</span>Заказать личного ИИ бота</div>
+        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+      </div>
+    </div>
+
+    <!-- Партнеры -->
+    <div id="partners" class="page">
+      <div class="title">Партнеры</div>
+      <div class="buttons-grid">
+        <div class="btn" onclick="Telegram.WebApp.openLink('https://truckset.com.ua/ru/')">
+          <span class="emoji">🚚</span>TruckSet
+        </div>
+        <div class="btn" onclick="Telegram.WebApp.openLink('https://sad-ogorod.od.ua/')">
+          <span class="emoji">🌱</span>Сад и огород
+        </div>
+        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+      </div>
+    </div>
+
+    <!-- Наши соцсети -->
+    <div id="socials" class="page">
+      <div class="title">Наши соцсети</div>
+      <div class="buttons-grid">
+        <div class="btn" onclick="Telegram.WebApp.openTelegramLink('https://t.me/my_smarthub')">
+          <span class="emoji">📣</span>Телеграм канал Smart[Hub]
+        </div>
+        <div class="btn" onclick="Telegram.WebApp.openLink('https://www.tiktok.com/@alicecat_odessa?_r=1&_t=ZS-941MacCLMYc')">
+          <span class="emoji">🎵</span>TikTok Алисы
+        </div>
+        <div class="btn"><span class="emoji">📸</span>Instagram Алисы</div>
+        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-    Telegram.WebApp.MainButton.hide();
+    const tg = Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    tg.MainButton.hide();
 
+    // Стек истории для возврата назад
+    let historyStack = ['main'];
+
+    // Функция показа страницы
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      historyStack.push(pageId);
+    }
+
+    // Функция назад
+    function goBack() {
+      if (historyStack.length > 1) {
+        historyStack.pop(); // удаляем текущую
+        const prev = historyStack[historyStack.length - 1];
+        showPage(prev);
+      } else {
+        tg.close(); // если на главном — закрываем Mini App
+      }
+    }
+
+    // Обработчики всех кнопок с data-action
+    document.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+
+        if (action === 'back') {
+          goBack();
+        } else if (action === 'go-to-assistant') {
+          tg.close(); // возврат в чат бота
+        } else if (action === 'go-to-features') {
+          showPage('features');
+        } else if (action === 'go-to-apk') {
+          tg.openTelegramLink('https://t.me/smartapp_apk');
+        } else if (action === 'go-to-market') {
+          showPage('market');
+        } else if (action === 'go-to-services') {
+          showPage('services');
+        } else if (action === 'go-to-partners') {
+          showPage('partners');
+        } else if (action === 'go-to-socials') {
+          showPage('socials');
+        }
+      });
+    });
+
+    // Клик по языку (заглушка)
     document.querySelector('.lang-switch').addEventListener('click', () => {
       alert('Переключение языка в разработке');
     });
