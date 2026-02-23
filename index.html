@@ -13,7 +13,7 @@
       font-family: 'Exo 2', system-ui, sans-serif;
       min-height: 100vh;
       color: #00f0ff;
-      background: linear-gradient(135deg, #0d001a 0%, #1a0033 50%, #2a004d 100%);
+      background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #111111 100%);
       overflow: hidden; height: 100dvh;
       position: relative;
     }
@@ -194,6 +194,7 @@
       flex-direction: column;
       align-items: center;
       gap: 2px;
+      pointer-events: none;
     }
 
     .btn .emoji { display: none; }
@@ -224,6 +225,30 @@
 
     .btn-back .btn-label { color: #00f0ff; font-size: 14px; }
 
+
+    .page:not(#main) .btn {
+      background: rgba(15,15,15,0.85) !important;
+      min-height: 70px !important;
+      height: auto !important;
+      aspect-ratio: unset !important;
+      justify-content: center !important;
+      padding: 14px 10px !important;
+    }
+    .page:not(#main) .btn::before {
+      display: none !important;
+    }
+    .page:not(#main) .btn-label {
+      color: #00f0ff !important;
+      font-size: 13px !important;
+    }
+    .page:not(#main) .btn .subtitle {
+      color: #88ffff !important;
+    }
+
+
+    .btn-content, .btn-label, .btn .subtitle, .btn span {
+      pointer-events: none;
+    }
 </style>
 </head>
 <body>
@@ -293,12 +318,42 @@
     <div id="features" class="page">
       <div class="title">Особые функции</div>
       <div class="buttons-grid">
-        <div class="btn"><span class="emoji">🖼️</span>Генерация фото по тексту</div>
-        <div class="btn"><span class="emoji">🎥</span>Скачать видео с YouTube/TikTok</div>
-        <div class="btn"><span class="emoji">₿</span>Курс криптовалют</div>
-        <div class="btn"><span class="emoji">✂️</span>Фото редактор</div>
-        <div class="btn"><span class="emoji">🔍</span>Анализ картинки</div>
-        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+        <div class="btn">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🖼️</span>
+            <span class="btn-label" style="color:#00f0ff;">Генерация фото по тексту</span>
+          </div>
+        </div>
+        <div class="btn">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🎥</span>
+            <span class="btn-label" style="color:#00f0ff;">Скачать видео с YouTube/TikTok</span>
+          </div>
+        </div>
+        <div class="btn">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">₿</span>
+            <span class="btn-label" style="color:#00f0ff;">Курс криптовалют</span>
+          </div>
+        </div>
+        <div class="btn">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">✂️</span>
+            <span class="btn-label" style="color:#00f0ff;">Фото редактор</span>
+          </div>
+        </div>
+        <div class="btn">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🔍</span>
+            <span class="btn-label" style="color:#00f0ff;">Анализ картинки</span>
+          </div>
+        </div>
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -306,9 +361,24 @@
     <div id="market" class="page">
       <div class="title">Маркет</div>
       <div class="buttons-grid">
-        <div class="btn" data-action="go-to-services"><span class="emoji">🛍️</span>Наши услуги</div>
-        <div class="btn" data-action="go-to-partners"><span class="emoji">🤝</span>Партнеры</div>
-        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+        <div class="btn" data-action="go-to-services">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🛍️</span>
+            <span class="btn-label" style="color:#00f0ff;">Наши услуги</span>
+          </div>
+        </div>
+        <div class="btn" data-action="go-to-partners">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🤝</span>
+            <span class="btn-label" style="color:#00f0ff;">Партнеры</span>
+          </div>
+        </div>
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -317,12 +387,23 @@
       <div class="title">Наши услуги</div>
       <div class="buttons-grid">
         <div class="btn" data-action="go-to-payment" data-product="alice">
-          <span class="emoji">🤖</span>Алиса ИИ безлимит
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🤖</span>
+            <span class="btn-label" style="color:#00f0ff;">Алиса ИИ безлимит</span>
+          </div>
         </div>
         <div class="btn" data-action="go-to-payment" data-product="custom">
-          <span class="emoji">🛠️</span>Заказать личного ИИ бота
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🛠️</span>
+            <span class="btn-label" style="color:#00f0ff;">Заказать личного ИИ бота</span>
+          </div>
         </div>
-        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -331,19 +412,31 @@
       <div class="title" id="payment-title">Оплата</div>
       <div class="buttons-grid">
         <div class="btn" data-action="pay-crypto">
-          <span class="emoji">₿</span>Крипто
-          <span class="subtitle">USDT, BTC, ETH...</span>
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">₿</span>
+            <span class="btn-label" style="color:#00f0ff;">Крипто
+          <span class="subtitle">USDT, BTC, ETH...</span></span>
+          </div>
         </div>
         <div class="btn" data-action="pay-card">
-          <span class="emoji">💳</span>Кредитная карта
-          <span class="subtitle">Visa / Mastercard</span>
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">💳</span>
+            <span class="btn-label" style="color:#00f0ff;">Кредитная карта
+          <span class="subtitle">Visa / Mastercard</span></span>
+          </div>
         </div>
         <div class="btn" data-action="pay-stars">
-          <span class="emoji">⭐</span>Telegram Stars
-          <span class="subtitle">Оплата звёздами</span>
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">⭐</span>
+            <span class="btn-label" style="color:#00f0ff;">Telegram Stars
+          <span class="subtitle">Оплата звёздами</span></span>
+          </div>
         </div>
         <div class="btn" data-action="back">
-          <span class="emoji">←</span>Назад
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
         </div>
       </div>
     </div>
@@ -353,12 +446,23 @@
       <div class="title">Партнеры</div>
       <div class="buttons-grid">
         <div class="btn" onclick="Telegram.WebApp.openLink('https://truckset.com.ua/ru/')">
-          <span class="emoji">🚚</span>TruckSet
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🚚</span>
+            <span class="btn-label" style="color:#00f0ff;">TruckSet</span>
+          </div>
         </div>
         <div class="btn" onclick="Telegram.WebApp.openLink('https://sad-ogorod.od.ua/')">
-          <span class="emoji">🌱</span>Сад и огород
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🌱</span>
+            <span class="btn-label" style="color:#00f0ff;">Сад и огород</span>
+          </div>
         </div>
-        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -367,13 +471,29 @@
       <div class="title">Наши соцсети</div>
       <div class="buttons-grid">
         <div class="btn" onclick="Telegram.WebApp.openTelegramLink('https://t.me/my_smarthub')">
-          <span class="emoji">📣</span>Телеграм канал Smart[Hub]
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">📣</span>
+            <span class="btn-label" style="color:#00f0ff;">Телеграм канал Smart[Hub]</span>
+          </div>
         </div>
         <div class="btn" onclick="Telegram.WebApp.openLink('https://www.tiktok.com/@alicecat_odessa?_r=1&_t=ZS-941MacCLMYc')">
-          <span class="emoji">🎵</span>TikTok Алисы
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">🎵</span>
+            <span class="btn-label" style="color:#00f0ff;">TikTok Алисы</span>
+          </div>
         </div>
-        <div class="btn"><span class="emoji">📸</span>Instagram Алисы</div>
-        <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+        <div class="btn">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">📸</span>
+            <span class="btn-label" style="color:#00f0ff;">Instagram Алисы</span>
+          </div>
+        </div>
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -382,19 +502,31 @@
       <div class="title">На Кибервискас 🐱</div>
       <div class="buttons-grid">
         <div class="btn" data-action="pay-crypto">
-          <span class="emoji">₿</span>Крипто
-          <span class="subtitle">USDT, BTC, ETH...</span>
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">₿</span>
+            <span class="btn-label" style="color:#00f0ff;">Крипто
+          <span class="subtitle">USDT, BTC, ETH...</span></span>
+          </div>
         </div>
         <div class="btn" data-action="pay-card">
-          <span class="emoji">💳</span>Кредитная карта
-          <span class="subtitle">Visa / Mastercard</span>
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">💳</span>
+            <span class="btn-label" style="color:#00f0ff;">Кредитная карта
+          <span class="subtitle">Visa / Mastercard</span></span>
+          </div>
         </div>
         <div class="btn" data-action="pay-stars">
-          <span class="emoji">⭐</span>Telegram Stars
-          <span class="subtitle">Оплата звёздами</span>
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">⭐</span>
+            <span class="btn-label" style="color:#00f0ff;">Telegram Stars
+          <span class="subtitle">Оплата звёздами</span></span>
+          </div>
         </div>
         <div class="btn" data-action="back">
-          <span class="emoji">←</span>Назад
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
         </div>
       </div>
     </div>
