@@ -106,11 +106,11 @@
 
   <div class="container">
 
-    <!-- Главное меню (page id="main") -->
+    <!-- Главное меню -->
     <div id="main" class="page active">
       <div class="title">Main Menu</div>
       <div class="buttons-grid">
-        <div class="btn" data-action="go-to-assistant">
+        <div class="btn" data-action="go-to-bot">
           <span class="emoji">💬</span>
           ИИ ассистент Алиса
           <span class="subtitle">Текстовый чат</span>
@@ -180,9 +180,35 @@
     <div id="services" class="page">
       <div class="title">Наши услуги</div>
       <div class="buttons-grid">
-        <div class="btn"><span class="emoji">🤖</span>Алиса ИИ безлимит</div>
-        <div class="btn"><span class="emoji">🛠️</span>Заказать личного ИИ бота</div>
+        <div class="btn" data-action="go-to-payment" data-product="alice">
+          <span class="emoji">🤖</span>Алиса ИИ безлимит
+        </div>
+        <div class="btn" data-action="go-to-payment" data-product="custom">
+          <span class="emoji">🛠️</span>Заказать личного ИИ бота
+        </div>
         <div class="btn" data-action="back"><span class="emoji">←</span>Назад</div>
+      </div>
+    </div>
+
+    <!-- Оплата -->
+    <div id="payment" class="page">
+      <div class="title" id="payment-title">Оплата</div>
+      <div class="buttons-grid">
+        <div class="btn" data-action="pay-crypto">
+          <span class="emoji">₿</span>Крипто
+          <span class="subtitle">USDT, BTC, ETH...</span>
+        </div>
+        <div class="btn" data-action="pay-card">
+          <span class="emoji">💳</span>Кредитная карта
+          <span class="subtitle">Visa / Mastercard</span>
+        </div>
+        <div class="btn" data-action="pay-stars">
+          <span class="emoji">⭐</span>Telegram Stars
+          <span class="subtitle">Оплата звёздами</span>
+        </div>
+        <div class="btn" data-action="back">
+          <span class="emoji">←</span>Назад
+        </div>
       </div>
     </div>
 
@@ -215,6 +241,28 @@
       </div>
     </div>
 
+    <!-- Донат (Кибервискас) -->
+    <div id="donate" class="page">
+      <div class="title">На Кибервискас 🐱</div>
+      <div class="buttons-grid">
+        <div class="btn" data-action="pay-crypto">
+          <span class="emoji">₿</span>Крипто
+          <span class="subtitle">USDT, BTC, ETH...</span>
+        </div>
+        <div class="btn" data-action="pay-card">
+          <span class="emoji">💳</span>Кредитная карта
+          <span class="subtitle">Visa / Mastercard</span>
+        </div>
+        <div class="btn" data-action="pay-stars">
+          <span class="emoji">⭐</span>Telegram Stars
+          <span class="subtitle">Оплата звёздами</span>
+        </div>
+        <div class="btn" data-action="back">
+          <span class="emoji">←</span>Назад
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -226,52 +274,84 @@
     // Стек истории для возврата назад
     let historyStack = ['main'];
 
-    // Функция показа страницы
+    // Показ страницы
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
       historyStack.push(pageId);
     }
 
-    // Функция назад
+    // Назад
     function goBack() {
       if (historyStack.length > 1) {
-        historyStack.pop(); // удаляем текущую
+        historyStack.pop();
         const prev = historyStack[historyStack.length - 1];
-        showPage(prev);
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(prev).classList.add('active');
       } else {
-        tg.close(); // если на главном — закрываем Mini App
+        tg.close();
       }
     }
 
-    // Обработчики всех кнопок с data-action
+    // Обработчики кнопок
     document.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
         const action = btn.dataset.action;
 
         if (action === 'back') {
           goBack();
-        } else if (action === 'go-to-assistant') {
-          tg.close(); // возврат в чат бота
+
+        } else if (action === 'go-to-bot') {
+          // Открываем бота, не закрывая miniapp
+          tg.openTelegramLink('https://t.me/Alicesmartcat_bot');
+
         } else if (action === 'go-to-features') {
           showPage('features');
+
         } else if (action === 'go-to-apk') {
           tg.openTelegramLink('https://t.me/smartapp_apk');
+
+        } else if (action === 'go-to-game') {
+          // заглушка
         } else if (action === 'go-to-market') {
           showPage('market');
-        } else if (action === 'go-to-services') {
-          showPage('services');
-        } else if (action === 'go-to-partners') {
-          showPage('partners');
+
+        } else if (action === 'go-to-stickers') {
+          tg.openTelegramLink('https://t.me/addstickers/AliceSmartCat');
+
         } else if (action === 'go-to-socials') {
           showPage('socials');
+
+        } else if (action === 'go-to-donate') {
+          showPage('donate');
+
+        } else if (action === 'go-to-services') {
+          showPage('services');
+
+        } else if (action === 'go-to-partners') {
+          showPage('partners');
+
+        } else if (action === 'go-to-payment') {
+          const product = btn.dataset.product;
+          const title = product === 'alice' ? 'Алиса ИИ безлимит' : 'Личный ИИ бот';
+          document.getElementById('payment-title').textContent = 'Оплата: ' + title;
+          showPage('payment');
+
+        } else if (action === 'pay-crypto') {
+          tg.showAlert('Крипто оплата — скоро будет доступна! Напиши нам в поддержку.');
+
+        } else if (action === 'pay-card') {
+          tg.showAlert('Оплата картой — скоро будет доступна! Напиши нам в поддержку.');
+
+        } else if (action === 'pay-stars') {
+          tg.showAlert('Оплата Telegram Stars — скоро будет доступна!');
         }
       });
     });
 
-    // Клик по языку (заглушка)
+    // Переключение языка (заглушка)
     document.querySelector('.lang-switch').addEventListener('click', () => {
-      alert('Переключение языка в разработке');
+      tg.showAlert('Переключение языка в разработке');
     });
   </script>
 </body>
