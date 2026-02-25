@@ -779,60 +779,60 @@
         } else if (action === 'feature-img-gen') {
           tg.showPopup({
             title: '🖼️ Генерация картинки',
-            message: 'Нажмите "Открыть в боте", затем отправьте боту описание картинки командой /imagine [описание]',
+            message: 'Бот попросит описание — напишите что хотите сгенерировать',
             buttons: [
               { id: 'confirm', type: 'default', text: 'Открыть в боте' },
               { id: 'cancel', type: 'cancel', text: 'Отмена' }
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({ action: 'feature-img-gen' }));
               tg.close();
+              setTimeout(() => { tg.openTelegramLink('https://t.me/Alicesmartcat_bot?start=feature-img-gen'); }, 300);
             }
           });
 
         } else if (action === 'feature-photo-editor') {
           tg.showPopup({
             title: '✂️ Редактор фото',
-            message: 'Отправьте фото боту командой /editor — можно обрезать, повернуть, изменить яркость',
+            message: 'Бот попросит отправить фото для редактирования',
             buttons: [
               { id: 'confirm', type: 'default', text: 'Открыть в боте' },
               { id: 'cancel', type: 'cancel', text: 'Отмена' }
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({ action: 'feature-photo-editor' }));
               tg.close();
+              setTimeout(() => { tg.openTelegramLink('https://t.me/Alicesmartcat_bot?start=feature-photo-editor'); }, 300);
             }
           });
 
         } else if (action === 'feature-ocr') {
           tg.showPopup({
             title: '🔍 Анализ фото / OCR',
-            message: 'Отправьте фото боту — он извлечёт текст с изображения или опишет что на нём',
+            message: 'Бот попросит отправить фото — распознает текст на нём',
             buttons: [
               { id: 'confirm', type: 'default', text: 'Открыть в боте' },
               { id: 'cancel', type: 'cancel', text: 'Отмена' }
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({ action: 'feature-ocr' }));
               tg.close();
+              setTimeout(() => { tg.openTelegramLink('https://t.me/Alicesmartcat_bot?start=feature-ocr'); }, 300);
             }
           });
 
         } else if (action === 'feature-video') {
           tg.showPopup({
             title: '🎥 Скачать видео',
-            message: 'Отправьте боту ссылку на видео командой /video [ссылка] — поддерживается YouTube и TikTok',
+            message: 'Бот попросит ссылку — поддерживается YouTube и TikTok',
             buttons: [
               { id: 'confirm', type: 'default', text: 'Открыть в боте' },
               { id: 'cancel', type: 'cancel', text: 'Отмена' }
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({ action: 'feature-video' }));
               tg.close();
+              setTimeout(() => { tg.openTelegramLink('https://t.me/Alicesmartcat_bot?start=feature-video'); }, 300);
             }
           });
 
@@ -854,30 +854,30 @@
         } else if (action === 'feature-pdf') {
           tg.showPopup({
             title: '📄 Конвертер файлов',
-            message: 'Отправьте боту файл командой /convert — поддерживается PDF↔Word и JPG→PDF',
+            message: 'Бот попросит отправить файл — поддерживается PDF↔Word и JPG→PDF',
             buttons: [
               { id: 'confirm', type: 'default', text: 'Открыть в боте' },
               { id: 'cancel', type: 'cancel', text: 'Отмена' }
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({ action: 'feature-pdf' }));
               tg.close();
+              setTimeout(() => { tg.openTelegramLink('https://t.me/Alicesmartcat_bot?start=feature-pdf'); }, 300);
             }
           });
 
         } else if (action === 'feature-summarize') {
           tg.showPopup({
             title: '📰 Суммаризация статьи',
-            message: 'Отправьте боту ссылку на статью командой /sum [ссылка] — получите краткое содержание',
+            message: 'Бот попросит ссылку на статью — пришлёт краткое содержание',
             buttons: [
               { id: 'confirm', type: 'default', text: 'Открыть в боте' },
               { id: 'cancel', type: 'cancel', text: 'Отмена' }
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({ action: 'feature-summarize' }));
               tg.close();
+              setTimeout(() => { tg.openTelegramLink('https://t.me/Alicesmartcat_bot?start=feature-summarize'); }, 300);
             }
           });
 
