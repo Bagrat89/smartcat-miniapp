@@ -551,141 +551,141 @@
       </div>
     </div>
 
-  </div>
-
-  <!-- ─── Крипто ─────────────────────────────────────────── -->
-<div id="crypto" class="page">
-  <div class="title">₿ Курс криптовалют</div>
-  <div style="padding:10px;">
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <input id="crypto-amount" type="number" value="1" min="0" step="any"
-        style="flex:1;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;">
-      <select id="crypto-from"
-        style="flex:1;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;">
-        <option value="bitcoin">BTC</option>
-        <option value="ethereum">ETH</option>
-        <option value="tether">USDT</option>
-        <option value="solana">SOL</option>
-        <option value="the-open-network">TON</option>
-      </select>
-      <select id="crypto-to"
-        style="flex:1;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;">
-        <option value="usd">USD</option>
-        <option value="eur">EUR</option>
-        <option value="rub">RUB</option>
-        <option value="uah">UAH</option>
-      </select>
-    </div>
-    <button onclick="convertCrypto()"
-      style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;">
-      Конвертировать
-    </button>
-    <div id="crypto-result"
-      style="margin-top:14px;text-align:center;font-size:18px;color:#00f0ff;min-height:30px;"></div>
-    <div id="crypto-rates"
-      style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
-  </div>
-  <div style="padding:0 10px 10px;">
-    <div class="btn" data-action="back">
-      <div class="btn-content">
-        <span style="font-size:22px;margin-bottom:3px;">←</span>
-        <span class="btn-label" style="color:#00f0ff;">Назад</span>
+    <!-- ─── Крипто ─────────────────────────────────────────── -->
+    <div id="crypto" class="page">
+      <div class="title">₿ Курс криптовалют</div>
+      <div style="padding:10px;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <input id="crypto-amount" type="number" value="1" min="0" step="any"
+            style="flex:1;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;">
+          <select id="crypto-from"
+            style="flex:1;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;">
+            <option value="bitcoin">BTC</option>
+            <option value="ethereum">ETH</option>
+            <option value="tether">USDT</option>
+            <option value="solana">SOL</option>
+            <option value="the-open-network">TON</option>
+          </select>
+          <select id="crypto-to"
+            style="flex:1;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;">
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+            <option value="rub">RUB</option>
+            <option value="uah">UAH</option>
+          </select>
+        </div>
+        <button onclick="convertCrypto()"
+          style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;">
+          Конвертировать
+        </button>
+        <div id="crypto-result"
+          style="margin-top:14px;text-align:center;font-size:18px;color:#00f0ff;min-height:30px;"></div>
+        <div id="crypto-rates"
+          style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+      </div>
+      <div style="padding:0 10px 10px;">
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ─── Ежедневник ─────────────────────────────────────── -->
-<div id="diary" class="page">
-  <div class="title">📅 Ежедневник</div>
-  <div style="padding:10px;">
-    <input id="diary-date" type="date"
-      style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;box-sizing:border-box;">
-    <input id="diary-time" type="time"
-      style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;box-sizing:border-box;">
-    <textarea id="diary-text" placeholder="Заметка или напоминание..."
-      style="width:100%;height:90px;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;resize:none;box-sizing:border-box;margin-bottom:8px;"></textarea>
-    <button onclick="saveDiary()"
-      style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:12px;">
-      Сохранить
-    </button>
-    <div id="diary-list" style="display:flex;flex-direction:column;gap:8px;"></div>
-  </div>
-  <div style="padding:0 10px 10px;">
-    <div class="btn" data-action="back">
-      <div class="btn-content">
-        <span style="font-size:22px;margin-bottom:3px;">←</span>
-        <span class="btn-label" style="color:#00f0ff;">Назад</span>
+    <!-- ─── Ежедневник ─────────────────────────────────────── -->
+    <div id="diary" class="page">
+      <div class="title">📅 Ежедневник</div>
+      <div style="padding:10px;">
+        <input id="diary-date" type="date"
+          style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;box-sizing:border-box;">
+        <input id="diary-time" type="time"
+          style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;box-sizing:border-box;">
+        <textarea id="diary-text" placeholder="Заметка или напоминание..."
+          style="width:100%;height:90px;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;resize:none;box-sizing:border-box;margin-bottom:8px;"></textarea>
+        <button onclick="saveDiary()"
+          style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:12px;">
+          Сохранить
+        </button>
+        <div id="diary-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <div style="padding:0 10px 10px;">
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ─── QR Генератор ───────────────────────────────────── -->
-<div id="qr" class="page">
-  <div class="title">📷 QR Генератор</div>
-  <div style="padding:10px;">
-    <input id="qr-input" type="text" placeholder="Текст или ссылка..."
-      style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;box-sizing:border-box;margin-bottom:8px;">
-    <button onclick="generateQR()"
-      style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:16px;">
-      Сгенерировать QR
-    </button>
-    <div id="qr-result" style="display:flex;justify-content:center;"></div>
-  </div>
-  <div style="padding:0 10px 10px;">
-    <div class="btn" data-action="back">
-      <div class="btn-content">
-        <span style="font-size:22px;margin-bottom:3px;">←</span>
-        <span class="btn-label" style="color:#00f0ff;">Назад</span>
+    <!-- ─── QR Генератор ───────────────────────────────────── -->
+    <div id="qr" class="page">
+      <div class="title">📷 QR Генератор</div>
+      <div style="padding:10px;">
+        <input id="qr-input" type="text" placeholder="Текст или ссылка..."
+          style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;box-sizing:border-box;margin-bottom:8px;">
+        <button onclick="generateQR()"
+          style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:16px;">
+          Сгенерировать QR
+        </button>
+        <div id="qr-result" style="display:flex;justify-content:center;"></div>
+      </div>
+      <div style="padding:0 10px 10px;">
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ─── Переводчик ─────────────────────────────────────── -->
-<div id="translator" class="page">
-  <div class="title">🌐 Переводчик</div>
-  <div style="padding:10px;">
-    <select id="trans-from"
-      style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;">
-      <option value="auto">Определить язык</option>
-      <option value="ru">Русский</option>
-      <option value="en">Английский</option>
-      <option value="uk">Украинский</option>
-      <option value="de">Немецкий</option>
-      <option value="fr">Французский</option>
-      <option value="es">Испанский</option>
-      <option value="zh">Китайский</option>
-    </select>
-    <select id="trans-to"
-      style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;">
-      <option value="en">Английский</option>
-      <option value="ru">Русский</option>
-      <option value="uk">Украинский</option>
-      <option value="de">Немецкий</option>
-      <option value="fr">Французский</option>
-      <option value="es">Испанский</option>
-      <option value="zh">Китайский</option>
-    </select>
-    <textarea id="trans-input" placeholder="Введите текст для перевода..."
-      style="width:100%;height:90px;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;resize:none;box-sizing:border-box;margin-bottom:8px;"></textarea>
-    <button onclick="translateText()"
-      style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:12px;">
-      Перевести
-    </button>
-    <div id="trans-result"
-      style="padding:10px;border-radius:8px;border:1px solid #333;background:#0d0d1f;color:#fff;font-size:15px;min-height:50px;white-space:pre-wrap;"></div>
-  </div>
-  <div style="padding:0 10px 10px;">
-    <div class="btn" data-action="back">
-      <div class="btn-content">
-        <span style="font-size:22px;margin-bottom:3px;">←</span>
-        <span class="btn-label" style="color:#00f0ff;">Назад</span>
+    <!-- ─── Переводчик ─────────────────────────────────────── -->
+    <div id="translator" class="page">
+      <div class="title">🌐 Переводчик</div>
+      <div style="padding:10px;">
+        <select id="trans-from"
+          style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;">
+          <option value="auto">Определить язык</option>
+          <option value="ru">Русский</option>
+          <option value="en">Английский</option>
+          <option value="uk">Украинский</option>
+          <option value="de">Немецкий</option>
+          <option value="fr">Французский</option>
+          <option value="es">Испанский</option>
+          <option value="zh">Китайский</option>
+        </select>
+        <select id="trans-to"
+          style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;">
+          <option value="en">Английский</option>
+          <option value="ru">Русский</option>
+          <option value="uk">Украинский</option>
+          <option value="de">Немецкий</option>
+          <option value="fr">Французский</option>
+          <option value="es">Испанский</option>
+          <option value="zh">Китайский</option>
+        </select>
+        <textarea id="trans-input" placeholder="Введите текст для перевода..."
+          style="width:100%;height:90px;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;resize:none;box-sizing:border-box;margin-bottom:8px;"></textarea>
+        <button onclick="translateText()"
+          style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:12px;">
+          Перевести
+        </button>
+        <div id="trans-result"
+          style="padding:10px;border-radius:8px;border:1px solid #333;background:#0d0d1f;color:#fff;font-size:15px;min-height:50px;white-space:pre-wrap;"></div>
+      </div>
+      <div style="padding:0 10px 10px;">
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
-</div>
 
 <script>
     const tg = Telegram.WebApp;
