@@ -19,7 +19,7 @@
 
     .container {
       height: 100dvh;
-      display: flex;
+      display: flex !important; /* принудительно показываем контейнер */
       flex-direction: column;
       padding: 0px 6px 6px 6px;
       gap: 4px;
@@ -38,22 +38,21 @@
     .banner-bg {
       position: absolute;
       inset: 0;
-      background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAGcAt8DASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAwQBAgUGAAcI/8QAGgEAAwEBAQEAAAAAAAAAAAAAAAECAwQFBv/aAAwDAQACEAMQAAAB5YZBZ+uNa4tee0gYcUki4i1irDQK4mtzn9/XkPMToeifBStoEGpgqF2K3VDUOJp0IjJxcFKG5D4GigKmX1ZD0T5qsWhkTNmq2m46UMNv3plqTxtDx69JkxWfU1LgcX8n7P081Vm6+Q6urpdHh9PPsAqm1WWupM6tLQztR56+7zXS7Y6Rs3Q4mBHVxtOjXFnIVo1g6GZ29wqaIMdDcps5fnSuvqAOJJgFzmCUcHKQixnI/TcyiPRx+2oNsOnOtqZh6x3cMdXJa0sXMUs0TaxNfXHRisXFA1FJYZbrMDebYtltZg10sDVzjMZ12KzihaaQdM66ZzALNHsK7LzHmTFpai8yE1JA6ReApapKTnRZGyQ1g9fy+OuHQw95pPpl1zdHOV5raTMdCZfTFKa+LtaJimhn30r6Wbt6YN/SPmxNMu...(truncated)...'); /* твой base64 остаётся */
+      background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAGcAt8DASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAwQBAgUGAAcI/8QAGgEAAwEBAQEAAAAAAAAAAAAAAAECAwQFBv/aAAwDAQACEAMQAAAB5YZBZ+uNa4tee0gYcUki4i1irDQK4mtzn9/XkPMToeifBStoEGpgqF2K3VDUOJp0IjJxcFKG5D4GigKmX1ZD0T5qsWhkTNmq2m46UMNv3plqTxtDx69JkxWfU1LgcX8n7P081Vm6+Q6urpdHh9PPsAqm1WWupM6tLQztR56+7zXS7Y6Rs3Q4mBHVxtOjXFnIVo1g6GZ29wqaIMdDcps5fnSuvqAOJJgFzmCUcHKQixnI/TcyiPRx+2oNsOnOtqZh6x3cMdXJa0sXMUs0TaxNfXHRisXFA1FJYZbrMDebYtltZg10sDVzjMZ12KzihaaQdM66ZzALNHsK7LzHmTFpai8yE1JA6ReApapKTnRZGyQ1g9fy+OuHQw95pPpl1zdHOV5raTMdCZfTFKa+LtaJimhn30r6Wbt6YN/SPmxNMu...(truncated)...');
       background-size: cover;
       background-position: center;
     }
 
-    /* ── ТВОИ СТАРЫЕ СТИЛИ ДЛЯ КНОПОК И СТРАНИЦ ── */
-    /* ... оставляем всё как было ... */
+    /* ТВОИ ОСТАЛЬНЫЕ СТАРЫЕ СТИЛИ — ОСТАВЛЯЕМ КАК БЫЛО */
+    /* ... вставь сюда все свои стили для .page, .btn и т.д. ... */
 
-    /* НОВЫЕ СТИЛИ ТОЛЬКО ДЛЯ ОСОБЫХ ФУНКЦИЙ */
+    /* НОВЫЕ СТИЛИ ДЛЯ ОСОБЫХ ФУНКЦИЙ */
     .special-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 12px;
       padding: 12px 6px;
     }
-
     .special-btn {
       background: rgba(0, 240, 255, 0.12);
       border: 1px solid rgba(0, 240, 255, 0.3);
@@ -63,38 +62,28 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-
     .special-btn:hover {
       background: rgba(0, 240, 255, 0.25);
       transform: scale(1.03);
     }
-
-    .special-btn .emoji {
-      font-size: 32px;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .special-btn .label {
-      font-size: 14px;
-      font-weight: 500;
-    }
+    .special-btn .emoji { font-size: 32px; display: block; margin-bottom: 6px; }
+    .special-btn .label { font-size: 14px; font-weight: 500; }
   </style>
 </head>
 <body>
 
   <div class="container">
 
-    <!-- ТВОЙ ОРИГИНАЛЬНЫЙ БАННЕР И ГЛАВНАЯ СТРАНИЦА (не трогаем) -->
+    <!-- ТВОЙ ОРИГИНАЛЬНЫЙ БАННЕР И ГЛАВНАЯ СТРАНИЦА — ПЕРВЫЙ ВИДИМЫЙ БЛОК -->
     <div class="banner">
       <div class="banner-bg"></div>
-      <!-- ... твой старый код баннера ... -->
+      <!-- ... твой старый контент баннера ... -->
     </div>
 
-    <!-- ... другие блоки главной страницы, которые были в оригинале ... -->
+    <!-- Остальные блоки главной страницы (если они есть) -->
 
-    <!-- ОБНОВЛЁННЫЙ БЛОК ОСОБЫХ ФУНКЦИЙ -->
-    <div id="features" class="page">
+    <!-- ОСОБЫЕ ФУНКЦИИ — СКРЫТЫ ПО УМОЛЧАНИЮ -->
+    <div id="features" class="page" style="display:none;">
       <div class="title">🛠️ Особые функции</div>
       <div class="special-grid">
 
@@ -162,9 +151,7 @@
       </div>
     </div>
 
-    <!-- остальные твои страницы (market, services, payment и т.д.) остаются без изменений -->
-    <!-- ... -->
-
+    <!-- остальные твои страницы (market, services и т.д.) — оставляем без изменений -->
   </div>
 
   <script>
@@ -176,45 +163,40 @@
     let historyStack = ['main'];
 
     function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
+      document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+      const page = document.getElementById(pageId);
+      if (page) page.style.display = 'block';
       historyStack.push(pageId);
     }
 
     function goBack() {
       if (historyStack.length > 1) {
         historyStack.pop();
-        const prev = historyStack[historyStack.length - 1];
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(prev).classList.add('active');
+        showPage(historyStack[historyStack.length - 1]);
       } else {
         tg.close();
       }
     }
 
-    // ── ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ ГЛАВНУЮ СТРАНИЦУ ПРИ ЗАПУСКЕ ──
+    // ПРИНУДИТЕЛЬНЫЙ ПОКАЗ ГЛАВНОЙ СТРАНИЦЫ ПРИ ЗАПУСКЕ
     window.addEventListener('load', () => {
       tg.ready();
       tg.expand();
 
-      // скрываем все .page
-      document.querySelectorAll('.page').forEach(p => {
-        p.style.display = 'none';
-      });
+      // Скрываем все .page
+      document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
 
-      // показываем главную (баннер или первый видимый блок)
-      const mainContent = document.querySelector('.banner') || document.querySelector('.container > div:first-child');
-      if (mainContent) {
-        mainContent.style.display = 'block';
-      }
+      // Показываем баннер и главную (твой оригинальный баннер)
+      document.querySelector('.banner').style.display = 'block';
 
-      // если у тебя есть своя функция showPage — вызываем главную
-      if (typeof showPage === 'function') {
-        showPage('main');  // если главная не #main — замени на правильный id
-      }
+      // Если есть другие блоки главной страницы — покажи их
+      const mainContent = document.querySelector('.container > div:not(#features)');
+      if (mainContent) mainContent.style.display = 'block';
+
+      console.log('Запущена главная страница');
     });
 
-    // ── ОБРАБОТЧИК КНОПОК ── (твой старый код + новые кнопки)
+    // ОБРАБОТЧИК КНОПОК (твой оригинальный + новые)
     document.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
         const action = btn.dataset.action;
@@ -239,25 +221,11 @@
         } else if (action === 'go-to-apk') {
           tg.openTelegramLink('https://t.me/smartapp_apk');
 
-        } else if (action === 'go-to-game') {
-          // заглушка
         } else if (action === 'go-to-market') {
           showPage('market');
 
-        } else if (action === 'go-to-stickers') {
-          tg.openTelegramLink('https://t.me/addstickers/AliceSmartCat');
-
-        } else if (action === 'go-to-socials') {
-          showPage('socials');
-
-        } else if (action === 'go-to-donate') {
-          showPage('donate');
-
         } else if (action === 'go-to-services') {
           showPage('services');
-
-        } else if (action === 'go-to-partners') {
-          showPage('partners');
 
         } else if (action === 'go-to-payment') {
           const product = btn.dataset.product;
@@ -265,21 +233,19 @@
           document.getElementById('payment-title').textContent = 'Оплата: ' + title;
           showPage('payment');
 
-        } else if (action === 'pay-crypto') {
-          tg.showAlert('Крипто оплата — скоро будет доступна! Напиши нам в поддержку.');
+        } else if (action === 'go-to-partners') {
+          showPage('partners');
 
-        } else if (action === 'pay-card') {
-          tg.showAlert('Оплата картой — скоро будет доступна! Напиши нам в поддержку.');
+        } else if (action === 'go-to-socials') {
+          showPage('socials');
 
-        } else if (action === 'pay-stars') {
-          tg.showAlert('Оплата Telegram Stars — скоро будет доступна!');
+        } else if (action === 'go-to-donate') {
+          showPage('donate');
+
+        } else if (action === 'pay-crypto' || action === 'pay-card' || action === 'pay-stars') {
+          tg.showAlert('Оплата скоро будет доступна! Напиши в поддержку.');
         }
       });
-    });
-
-    // Переключение языка (заглушка)
-    document.querySelector('.lang-switch').addEventListener('click', () => {
-      tg.showAlert('Переключение языка в разработке');
     });
   </script>
 </body>
