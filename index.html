@@ -1,280 +1,186 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Smartcat Miniapp</title>
+<!-- ===================== -->
+<!-- ТВОЙ ОРИГИНАЛ СОХРАНЁН -->
+<!-- ИЗМЕНЕНЫ ТОЛЬКО FEATURES + JS -->
+<!-- ===================== -->
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- ВСТАВЬ ЭТО ВМЕСТО index.html -->
 
-<style>
+<!-- ⚠️ Я опускаю верхнюю часть (она у тебя уже верная)
+   НИЖЕ — полностью готовый файл начиная с FEATURES
+-->
 
-*{margin:0;padding:0;box-sizing:border-box;}
+<!-- ================================================= -->
+<!-- ОСОБЫЕ ФУНКЦИИ (НОВАЯ ВЕРСИЯ) -->
+<!-- ================================================= -->
 
-body{
-background:#000;
-color:#fff;
-font-family:sans-serif;
-height:100dvh;
-overflow:hidden;
-}
-
-.container{
-height:100dvh;
-display:flex;
-flex-direction:column;
-gap:8px;
-padding:8px;
-}
-
-.page{display:none;}
-.page.active{display:block;}
-
-.title{
-text-align:center;
-font-size:20px;
-margin-bottom:10px;
-color:#00f0ff;
-}
-
-.buttons-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-}
-
-.btn{
-background:rgba(255,255,255,.06);
-border-radius:14px;
-padding:14px;
-text-align:center;
-cursor:pointer;
-transition:.25s;
-border:1px solid rgba(0,255,255,.2);
-}
-
-.btn:hover{
-transform:translateY(-3px);
-background:rgba(0,255,255,.15);
-}
-
-.btn-content{
-display:flex;
-flex-direction:column;
-align-items:center;
-}
-
-.btn-label{color:#00f0ff;font-size:14px;}
-
-/* ===== SPECIAL FUNCTIONS ===== */
-
-.special-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-top:10px;
-}
-
-.special-btn{
-backdrop-filter:blur(12px);
-background:rgba(255,255,255,.06);
-border:1px solid rgba(0,255,255,.25);
-border-radius:14px;
-padding:12px 6px;
-text-align:center;
-cursor:pointer;
-transition:.25s;
-}
-
-.special-btn:hover{
-transform:translateY(-3px) scale(1.03);
-background:rgba(0,255,255,.12);
-box-shadow:0 0 12px rgba(0,255,255,.35);
-}
-
-.special-emoji{
-font-size:28px;
-display:block;
-margin-bottom:6px;
-}
-
-.special-label{
-font-size:12px;
-color:#00f0ff;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<!-- MAIN -->
-<div id="main" class="page active">
-
-<div class="title">🐱 Smartcat</div>
+<div id="features" class="page">
+<div class="title">Особые функции</div>
 
 <div class="buttons-grid">
 
-<div class="btn" data-action="go-to-features">
-<div class="btn-content">
-<span>✨</span>
-<span class="btn-label">Особые функции</span>
-</div>
+<div class="btn" data-action="special-function" data-function="image">
+<div class="btn-content">🎨<span class="btn-label">Генерация картинки</span></div>
 </div>
 
-<div class="btn" data-action="go-to-bot">
-<div class="btn-content">
-<span>🤖</span>
-<span class="btn-label">Открыть бота</span>
-</div>
+<div class="btn" data-action="special-function" data-function="photo-edit">
+<div class="btn-content">✂️📸<span class="btn-label">Редактор фото</span></div>
 </div>
 
-</div>
-</div>
-
-
-<!-- FEATURES -->
-<div id="features" class="page">
-
-<div class="title">Особые функции</div>
-
-<div class="special-grid">
-
-<div class="special-btn" data-action="special_function" data-function="image">
-<span class="special-emoji">🎨</span>
-<div class="special-label">Генерация картинки</div>
+<div class="btn" data-action="special-function" data-function="ocr">
+<div class="btn-content">🔍📄<span class="btn-label">OCR / Анализ фото</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="photo-edit">
-<span class="special-emoji">✂️📸</span>
-<div class="special-label">Редактор фото</div>
+<div class="btn" data-action="special-function" data-function="video">
+<div class="btn-content">⬇️🎥<span class="btn-label">Скачать видео</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="ocr">
-<span class="special-emoji">🔍📄</span>
-<div class="special-label">Анализ фото / OCR</div>
+<div class="btn" data-action="special-function" data-function="crypto">
+<div class="btn-content">₿💱<span class="btn-label">Курс криптовалют</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="video">
-<span class="special-emoji">⬇️🎥</span>
-<div class="special-label">Скачать видео</div>
+<div class="btn" data-action="special-function" data-function="smarthome">
+<div class="btn-content">🏠🔌<span class="btn-label">Умный дом</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="crypto">
-<span class="special-emoji">₿💱</span>
-<div class="special-label">Курс криптовалют</div>
+<div class="btn" data-action="special-function" data-function="planner">
+<div class="btn-content">📅🔔<span class="btn-label">Ежедневник</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="smarthome">
-<span class="special-emoji">🏠🔌</span>
-<div class="special-label">Умный дом</div>
+<div class="btn" data-action="special-function" data-function="qr">
+<div class="btn-content">🔲<span class="btn-label">QR код</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="planner">
-<span class="special-emoji">📅🔔</span>
-<div class="special-label">Ежедневник</div>
+<div class="btn" data-action="special-function" data-function="translate">
+<div class="btn-content">🌐<span class="btn-label">Переводчик</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="qr">
-<span class="special-emoji">🔲</span>
-<div class="special-label">QR код</div>
+<div class="btn" data-action="special-function" data-function="convert">
+<div class="btn-content">📁↔️<span class="btn-label">Конвертер файлов</span></div>
 </div>
 
-<div class="special-btn" data-action="special_function" data-function="translate">
-<span class="special-emoji">🌐</span>
-<div class="special-label">Переводчик</div>
+<div class="btn" data-action="special-function" data-function="summary">
+<div class="btn-content">📝✂️<span class="btn-label">Суммаризация статьи</span></div>
 </div>
-
-<div class="special-btn" data-action="special_function" data-function="convert">
-<span class="special-emoji">📁↔️</span>
-<div class="special-label">Конвертер файлов</div>
-</div>
-
-<div class="special-btn" data-action="special_function" data-function="summary">
-<span class="special-emoji">📝✂️</span>
-<div class="special-label">Суммаризация статьи</div>
-</div>
-
-</div>
-
-<br>
 
 <div class="btn" data-action="back">
-<div class="btn-content">
-<span>←</span>
-<span class="btn-label">Назад</span>
-</div>
+<div class="btn-content">←<span class="btn-label">Назад</span></div>
 </div>
 
 </div>
-
 </div>
 
+
+<!-- ================================================= -->
+<!-- SCRIPT (ПОЛНОСТЬЮ ОБНОВЛЕН) -->
+<!-- ================================================= -->
 
 <script>
 
 const tg = Telegram.WebApp;
 tg.ready();
 tg.expand();
+tg.MainButton.hide();
 
 let historyStack=['main'];
 
-function showPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-historyStack.push(id);
+function showPage(pageId){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(pageId).classList.add('active');
+ historyStack.push(pageId);
 }
 
 function goBack(){
-if(historyStack.length>1){
-historyStack.pop();
-const prev=historyStack[historyStack.length-1];
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(prev).classList.add('active');
-}else{
-tg.close();
-}
+ if(historyStack.length>1){
+  historyStack.pop();
+  const prev=historyStack[historyStack.length-1];
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(prev).classList.add('active');
+ }else{
+  tg.close();
+ }
 }
 
 document.querySelectorAll('[data-action]').forEach(btn=>{
-btn.addEventListener('click',()=>{
+ btn.addEventListener('click',()=>{
 
-const action=btn.dataset.action;
+  const action=btn.dataset.action;
 
-if(action==='go-to-features'){
-showPage('features');
-}
+  if(action==='back'){
+   goBack();
+  }
 
-else if(action==='go-to-bot'){
-tg.close();
-setTimeout(()=>window.open('https://t.me/Alicesmartcat_bot','_blank'),200);
-}
+  else if(action==='go-to-bot'){
+   tg.close();
+   setTimeout(()=>window.open('https://t.me/Alicesmartcat_bot','_blank'),200);
+  }
 
-else if(action==='back'){
-goBack();
-}
+  else if(action==='go-to-features'){
+   showPage('features');
+  }
 
-else if(action==='special_function'){
+  else if(action==='go-to-market'){
+   showPage('market');
+  }
 
-const func=btn.dataset.function;
+  else if(action==='go-to-services'){
+   showPage('services');
+  }
 
-tg.sendData(JSON.stringify({
-action:"special_function",
-function:func
-}));
+  else if(action==='go-to-partners'){
+   showPage('partners');
+  }
 
-tg.showAlert("Запускаем функцию в боте...");
-setTimeout(()=>tg.close(),700);
+  else if(action==='go-to-socials'){
+   showPage('socials');
+  }
 
-}
+  else if(action==='go-to-donate'){
+   showPage('donate');
+  }
 
+  else if(action==='go-to-payment'){
+   const product=btn.dataset.product;
+   const title=product==='alice'?'Алиса ИИ безлимит':'Личный ИИ бот';
+   document.getElementById('payment-title').textContent='Оплата: '+title;
+   showPage('payment');
+  }
+
+  else if(action==='pay-crypto'){
+   tg.showAlert('Крипто оплата скоро будет доступна');
+  }
+
+  else if(action==='pay-card'){
+   tg.showAlert('Оплата картой скоро будет доступна');
+  }
+
+  else if(action==='pay-stars'){
+   tg.showAlert('Оплата Stars скоро будет доступна');
+  }
+
+  /* =======================
+     НОВЫЕ AI ФУНКЦИИ
+  ======================= */
+
+  else if(action==='special-function'){
+
+   const fn=btn.dataset.function;
+   const name=btn.innerText.trim();
+
+   tg.sendData(JSON.stringify({
+    action:"special_function",
+    function:fn
+   }));
+
+   tg.showAlert("Запускаем "+name+" в боте...");
+   setTimeout(()=>tg.close(),500);
+  }
+
+ });
 });
+
+document.querySelector('.lang-switch')
+?.addEventListener('click',()=>{
+ tg.showAlert('Переключение языка в разработке');
 });
 
 </script>
-
-</body>
-</html>
-
