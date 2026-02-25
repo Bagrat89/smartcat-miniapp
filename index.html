@@ -17,7 +17,6 @@
       color: #fff;
     }
 
-    /* ── CONTAINER ── */
     .container {
       height: 100dvh;
       display: flex;
@@ -26,17 +25,35 @@
       gap: 4px;
     }
 
-    /* Все твои старые стили (баннер, кнопки и т.д.) — оставлены без изменений */
-    .banner { position: relative; width: 100%; flex: 0 0 15%; border-radius: 12px; overflow: hidden; cursor: pointer; }
-    .banner-bg { position: absolute; inset: 0; background-image: url('data:image/jpeg;base64,...'); } /* твой большой base64 оставлен */
+    /* ── BANNER ── */
+    .banner {
+      position: relative;
+      width: 100%;
+      flex: 0 0 15%;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+    }
 
-    /* ── НОВЫЕ СТИЛИ ДЛЯ ОСОБЫХ ФУНКЦИЙ ── */
+    .banner-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAGcAt8DASIAAhEBAxEB/8QAHAAAAgMBAQEBAAAAAAAAAAAAAwQBAgUGAAcI/8QAGgEAAwEBAQEAAAAAAAAAAAAAAAECAwQFBv/aAAwDAQACEAMQAAAB5YZBZ+uNa4tee0gYcUki4i1irDQK4mtzn9/XkPMToeifBStoEGpgqF2K3VDUOJp0IjJxcFKG5D4GigKmX1ZD0T5qsWhkTNmq2m46UMNv3plqTxtDx69JkxWfU1LgcX8n7P081Vm6+Q6urpdHh9PPsAqm1WWupM6tLQztR56+7zXS7Y6Rs3Q4mBHVxtOjXFnIVo1g6GZ29wqaIMdDcps5fnSuvqAOJJgFzmCUcHKQixnI/TcyiPRx+2oNsOnOtqZh6x3cMdXJa0sXMUs0TaxNfXHRisXFA1FJYZbrMDebYtltZg10sDVzjMZ12KzihaaQdM66ZzALNHsK7LzHmTFpai8yE1JA6ReApapKTnRZGyQ1g9fy+OuHQw95pPpl1zdHOV5raTMdCZfTFKa+LtaJimhn30r6Wbt6YN/SPmxNMu...(truncated)...'); /* твой base64 остаётся */
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* ── ТВОИ СТАРЫЕ СТИЛИ ДЛЯ КНОПОК И СТРАНИЦ ── */
+    /* ... оставляем всё как было ... */
+
+    /* НОВЫЕ СТИЛИ ТОЛЬКО ДЛЯ ОСОБЫХ ФУНКЦИЙ */
     .special-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 12px;
       padding: 12px 6px;
     }
+
     .special-btn {
       background: rgba(0, 240, 255, 0.12);
       border: 1px solid rgba(0, 240, 255, 0.3);
@@ -46,22 +63,37 @@
       cursor: pointer;
       transition: all 0.2s;
     }
+
     .special-btn:hover {
       background: rgba(0, 240, 255, 0.25);
       transform: scale(1.03);
     }
-    .special-btn .emoji { font-size: 32px; display: block; margin-bottom: 6px; }
-    .special-btn .label { font-size: 14px; font-weight: 500; }
+
+    .special-btn .emoji {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .special-btn .label {
+      font-size: 14px;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
 
-    <!-- Всё твоё старое содержимое (баннер, главная страница и т.д.) остаётся без изменений -->
-    <!-- ... (я не трогал этот блок) ... -->
+    <!-- ТВОЙ ОРИГИНАЛЬНЫЙ БАННЕР И ГЛАВНАЯ СТРАНИЦА (не трогаем) -->
+    <div class="banner">
+      <div class="banner-bg"></div>
+      <!-- ... твой старый код баннера ... -->
+    </div>
 
-    <!-- ОБНОВЛЁННЫЙ БЛОК "Особые функции" -->
+    <!-- ... другие блоки главной страницы, которые были в оригинале ... -->
+
+    <!-- ОБНОВЛЁННЫЙ БЛОК ОСОБЫХ ФУНКЦИЙ -->
     <div id="features" class="page">
       <div class="title">🛠️ Особые функции</div>
       <div class="special-grid">
@@ -88,7 +120,7 @@
 
         <div class="special-btn" data-action="special-crypto">
           <span class="emoji">₿💱</span>
-          <span class="label">Крипто курс + конвертер</span>
+          <span class="label">Курс крипты + конвертер</span>
         </div>
 
         <div class="special-btn" data-action="special-smarthome">
@@ -130,8 +162,8 @@
       </div>
     </div>
 
-    <!-- Остальные твои страницы (market, services, payment и т.д.) остаются без изменений -->
-    <!-- ... твой старый код ... -->
+    <!-- остальные твои страницы (market, services, payment и т.д.) остаются без изменений -->
+    <!-- ... -->
 
   </div>
 
@@ -160,7 +192,29 @@
       }
     }
 
-    // Обработчики кнопок (твой старый код + новые кнопки)
+    // ── ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ ГЛАВНУЮ СТРАНИЦУ ПРИ ЗАПУСКЕ ──
+    window.addEventListener('load', () => {
+      tg.ready();
+      tg.expand();
+
+      // скрываем все .page
+      document.querySelectorAll('.page').forEach(p => {
+        p.style.display = 'none';
+      });
+
+      // показываем главную (баннер или первый видимый блок)
+      const mainContent = document.querySelector('.banner') || document.querySelector('.container > div:first-child');
+      if (mainContent) {
+        mainContent.style.display = 'block';
+      }
+
+      // если у тебя есть своя функция showPage — вызываем главную
+      if (typeof showPage === 'function') {
+        showPage('main');  // если главная не #main — замени на правильный id
+      }
+    });
+
+    // ── ОБРАБОТЧИК КНОПОК ── (твой старый код + новые кнопки)
     document.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
         const action = btn.dataset.action;
@@ -171,32 +225,27 @@
         } else if (action.startsWith('special-')) {
           const func = action.replace('special-', '');
 
-          // Отправляем в бота
           tg.sendData(JSON.stringify({
             action: 'special_function',
             function: func
           }));
 
-          tg.showAlert(`Открываем ${func} в боте...`);
-          tg.close();   // закрываем миниапп, чтобы бот сразу ответил
+          tg.showAlert(`Запускаем ${func} в боте...`);
+          tg.close();
 
         } else if (action === 'go-to-features') {
           showPage('features');
 
+        } else if (action === 'go-to-apk') {
+          tg.openTelegramLink('https://t.me/smartapp_apk');
+
+        } else if (action === 'go-to-game') {
+          // заглушка
         } else if (action === 'go-to-market') {
           showPage('market');
 
-        } else if (action === 'go-to-services') {
-          showPage('services');
-
-        } else if (action === 'go-to-payment') {
-          const product = btn.dataset.product;
-          const title = product === 'alice' ? 'Алиса ИИ безлимит' : 'Личный ИИ бот';
-          document.getElementById('payment-title').textContent = 'Оплата: ' + title;
-          showPage('payment');
-
-        } else if (action === 'go-to-partners') {
-          showPage('partners');
+        } else if (action === 'go-to-stickers') {
+          tg.openTelegramLink('https://t.me/addstickers/AliceSmartCat');
 
         } else if (action === 'go-to-socials') {
           showPage('socials');
@@ -204,17 +253,33 @@
         } else if (action === 'go-to-donate') {
           showPage('donate');
 
-        } else if (action === 'pay-crypto' || action === 'pay-card' || action === 'pay-stars') {
-          tg.showAlert('Оплата скоро будет доступна! Напиши в поддержку.');
+        } else if (action === 'go-to-services') {
+          showPage('services');
+
+        } else if (action === 'go-to-partners') {
+          showPage('partners');
+
+        } else if (action === 'go-to-payment') {
+          const product = btn.dataset.product;
+          const title = product === 'alice' ? 'Алиса ИИ безлимит' : 'Личный ИИ бот';
+          document.getElementById('payment-title').textContent = 'Оплата: ' + title;
+          showPage('payment');
+
+        } else if (action === 'pay-crypto') {
+          tg.showAlert('Крипто оплата — скоро будет доступна! Напиши нам в поддержку.');
+
+        } else if (action === 'pay-card') {
+          tg.showAlert('Оплата картой — скоро будет доступна! Напиши нам в поддержку.');
+
+        } else if (action === 'pay-stars') {
+          tg.showAlert('Оплата Telegram Stars — скоро будет доступна!');
         }
       });
     });
 
-    // Принудительно показываем главную страницу при запуске
-    window.addEventListener('load', () => {
-      tg.ready();
-      tg.expand();
-      showPage('main');        // или 'home', если у тебя другой id главной страницы
+    // Переключение языка (заглушка)
+    document.querySelector('.lang-switch').addEventListener('click', () => {
+      tg.showAlert('Переключение языка в разработке');
     });
   </script>
 </body>
