@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
   
   <style>
-    /* Все твои старые стили остаются здесь без изменений */
+    /* ── ВСЕ ТВОИ СТАРЫЕ СТИЛИ ── (оставляем как есть) */
     * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
@@ -27,9 +27,10 @@
       gap: 4px;
     }
 
-    /* ... (вставь сюда все свои старые стили полностью) ... */
+    /* ... ВСТАВЬ СЮДА ВСЕ СВОИ ОСТАЛЬНЫЕ СТАРЫЕ СТИЛИ ... */
+    /* (баннер, кнопки, страницы и т.д.) */
 
-    /* ── Добавленные стили только для блока Особые функции ── */
+    /* ── Новые стили ТОЛЬКО для Особых функций ── */
     .special-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -76,12 +77,12 @@
 
   <div class="container">
 
-    <!-- ── ТВОЯ ЗАГЛАВНАЯ СТРАНИЦА (баннер, меню и т.д.) ── -->
-    <!-- Оставляем всё как было, не трогаем -->
-    <!-- ... твой старый код баннера, главной страницы, кнопок с картинками ... -->
+    <!-- ── ТВОЯ ЗАГЛАВНАЯ СТРАНИЦА / БАННЕР / МЕНЮ ── -->
+    <!-- ОСТАВЛЯЕМ ВСЁ КАК БЫЛО, НЕ ТРОГАЕМ -->
+    <!-- ... твой старый код главной страницы, баннера, кнопок с картинками и т.д. ... -->
 
     <!-- ── Блок Особые функции (обновлённый) ── -->
-    <div id="features" class="page" style="display:none;">  <!-- display:none — чтобы не открывался сразу -->
+    <div id="features" class="page" style="display:none;">  <!-- display:none — чтобы не открывался первым -->
 
       <div class="title">🛠️ Особые функции</div>
 
@@ -142,7 +143,7 @@
           <span class="label">Суммаризация статьи</span>
         </div>
 
-        <!-- Кнопка назад (если нужно — адаптируй под свой стиль) -->
+        <!-- Кнопка назад (адаптируй под свой стиль, если нужно) -->
         <div class="btn back-btn" data-action="back">
           <span class="emoji">←</span>
           <span class="label">Назад</span>
@@ -151,38 +152,64 @@
       </div>
     </div>
 
-    <!-- ... остальные твои страницы (market, socials, donate и т.д.) ... -->
+    <!-- ── ОСТАЛЬНЫЕ ТВОИ СТРАНИЦЫ (market, socials, donate и т.д.) ── -->
+    <!-- ... оставляем без изменений ... -->
 
   </div>
 
   <script>
-    // ── ТВОЙ СТАРЫЙ JS-КОД ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ ──
-    // ... весь твой существующий скрипт ...
+    // ── ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP ──
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
 
-    // Добавь это в конец обработчика кликов (где btn.addEventListener('click', ...))
-    // или создай новый if-блок
+    // ── ПРИНУДИТЕЛЬНО ПОКАЗЫВАЕМ ГЛАВНУЮ СТРАНИЦУ ПРИ ЗАПУСКЕ ──
+    window.addEventListener('DOMContentLoaded', () => {
+      // Показываем container
+      document.querySelector('.container').style.display = 'flex';
 
-    if (action.startsWith('special-')) {
-      const func = action.replace('special-', '');
-
-      // Пока заглушка для фронтовых функций
-      if (['qr', 'translate', 'crypto'].includes(func)) {
-        tg.showAlert(`Открываем ${func}... (в разработке)`);
-        // здесь позже будет реальная реализация на фронте
-      } 
-      // Остальные функции — отправляем в бота
-      else {
-        Telegram.WebApp.sendData(JSON.stringify({
-          action: 'special_function',
-          function: func
-        }));
-
-        tg.showAlert(`Запускаем ${func} в боте...`);
-        tg.close();  // закрываем миниапп → бот сразу ответит
+      // Если у тебя есть функция showPage — вызываем главную
+      if (typeof showPage === 'function') {
+        showPage('main');  // замени 'main' на реальное имя твоей главной страницы (home, start, banner и т.д.)
+      } else {
+        // Если страниц нет — показываем первый видимый блок
+        const firstVisible = document.querySelector('.container > div:not([style*="display:none"])');
+        if (firstVisible) firstVisible.style.display = 'block';
       }
-    }
 
-    // ... остальной твой код ...
+      console.log('Mini App запущен');
+    });
+
+    // ── ТВОЙ СТАРЫЙ ОБРАБОТЧИК КНОПОК ── (оставляем как есть)
+    // ... весь твой существующий код с btn.addEventListener ...
+
+    // Добавляем обработку новых кнопок Особых функций
+    document.querySelectorAll('.special-btn, .back-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+
+        if (action === 'back') {
+          // твоя функция назад (если есть)
+          goBack ? goBack() : tg.close();
+        } else if (action.startsWith('special-')) {
+          const func = action.replace('special-', '');
+
+          // Фронтовые функции (пока заглушки)
+          if (['qr', 'translate', 'crypto'].includes(func)) {
+            tg.showAlert(`Открываем ${func}... (в разработке)`);
+          } else {
+            // Остальные — отправляем в бота
+            tg.sendData(JSON.stringify({
+              action: 'special_function',
+              function: func
+            }));
+
+            tg.showAlert(`Запускаем ${func} в боте...`);
+            tg.close();  // бот сразу ответит
+          }
+        }
+      });
+    });
   </script>
 </body>
 </html>
