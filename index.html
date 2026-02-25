@@ -1,186 +1,102 @@
-<!-- ===================== -->
-<!-- ТВОЙ ОРИГИНАЛ СОХРАНЁН -->
-<!-- ИЗМЕНЕНЫ ТОЛЬКО FEATURES + JS -->
-<!-- ===================== -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<!-- ВСТАВЬ ЭТО ВМЕСТО index.html -->
+<title>Smartcat Miniapp</title>
 
-<!-- ⚠️ Я опускаю верхнюю часть (она у тебя уже верная)
-   НИЖЕ — полностью готовый файл начиная с FEATURES
--->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<!-- ================================================= -->
-<!-- ОСОБЫЕ ФУНКЦИИ (НОВАЯ ВЕРСИЯ) -->
-<!-- ================================================= -->
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 
-<div id="features" class="page">
-<div class="title">Особые функции</div>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ========= MAIN ========= -->
+<div id="main" class="page active">
+
+<div class="banner" data-action="go-to-bot">
+<img src="banner.jpg" class="banner-img">
+</div>
 
 <div class="buttons-grid">
 
-<div class="btn" data-action="special-function" data-function="image">
-<div class="btn-content">🎨<span class="btn-label">Генерация картинки</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="photo-edit">
-<div class="btn-content">✂️📸<span class="btn-label">Редактор фото</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="ocr">
-<div class="btn-content">🔍📄<span class="btn-label">OCR / Анализ фото</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="video">
-<div class="btn-content">⬇️🎥<span class="btn-label">Скачать видео</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="crypto">
-<div class="btn-content">₿💱<span class="btn-label">Курс криптовалют</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="smarthome">
-<div class="btn-content">🏠🔌<span class="btn-label">Умный дом</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="planner">
-<div class="btn-content">📅🔔<span class="btn-label">Ежедневник</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="qr">
-<div class="btn-content">🔲<span class="btn-label">QR код</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="translate">
-<div class="btn-content">🌐<span class="btn-label">Переводчик</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="convert">
-<div class="btn-content">📁↔️<span class="btn-label">Конвертер файлов</span></div>
-</div>
-
-<div class="btn" data-action="special-function" data-function="summary">
-<div class="btn-content">📝✂️<span class="btn-label">Суммаризация статьи</span></div>
-</div>
-
-<div class="btn" data-action="back">
-<div class="btn-content">←<span class="btn-label">Назад</span></div>
-</div>
+<div class="btn" data-action="go-to-features">⭐ Особые функции</div>
+<div class="btn" data-action="go-to-market">🛒 Маркет</div>
+<div class="btn" data-action="go-to-services">🤖 Сервисы</div>
+<div class="btn" data-action="go-to-socials">🌐 Соцсети</div>
+<div class="btn" data-action="go-to-donate">🐱 Донат</div>
 
 </div>
 </div>
 
 
-<!-- ================================================= -->
-<!-- SCRIPT (ПОЛНОСТЬЮ ОБНОВЛЕН) -->
-<!-- ================================================= -->
+<!-- ========= FEATURES ========= -->
+<div id="features" class="page">
 
-<script>
+<h2>Особые функции</h2>
 
-const tg = Telegram.WebApp;
-tg.ready();
-tg.expand();
-tg.MainButton.hide();
+<div class="buttons-grid">
 
-let historyStack=['main'];
+<div class="btn" data-action="special-function" data-function="image">🎨 Генерация картинки</div>
+<div class="btn" data-action="special-function" data-function="photo-edit">✂️ Редактор фото</div>
+<div class="btn" data-action="special-function" data-function="ocr">🔍 OCR</div>
+<div class="btn" data-action="special-function" data-function="video">⬇️ Скачать видео</div>
+<div class="btn" data-action="special-function" data-function="crypto">₿ Крипто курс</div>
+<div class="btn" data-action="special-function" data-function="smarthome">🏠 Умный дом</div>
+<div class="btn" data-action="special-function" data-function="planner">📅 Напоминания</div>
+<div class="btn" data-action="special-function" data-function="qr">🔲 QR код</div>
+<div class="btn" data-action="special-function" data-function="translate">🌐 Переводчик</div>
+<div class="btn" data-action="special-function" data-function="convert">📁 Конвертер</div>
+<div class="btn" data-action="special-function" data-function="summary">📝 Суммаризация</div>
 
-function showPage(pageId){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(pageId).classList.add('active');
- historyStack.push(pageId);
-}
+<div class="btn" data-action="back">← Назад</div>
 
-function goBack(){
- if(historyStack.length>1){
-  historyStack.pop();
-  const prev=historyStack[historyStack.length-1];
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(prev).classList.add('active');
- }else{
-  tg.close();
- }
-}
+</div>
+</div>
 
-document.querySelectorAll('[data-action]').forEach(btn=>{
- btn.addEventListener('click',()=>{
 
-  const action=btn.dataset.action;
+<!-- ========= MARKET ========= -->
+<div id="market" class="page">
+<h2>Маркет</h2>
+<div class="btn" data-action="back">← Назад</div>
+</div>
 
-  if(action==='back'){
-   goBack();
-  }
 
-  else if(action==='go-to-bot'){
-   tg.close();
-   setTimeout(()=>window.open('https://t.me/Alicesmartcat_bot','_blank'),200);
-  }
+<!-- ========= SERVICES ========= -->
+<div id="services" class="page">
+<h2>Сервисы</h2>
+<div class="btn" data-action="back">← Назад</div>
+</div>
 
-  else if(action==='go-to-features'){
-   showPage('features');
-  }
 
-  else if(action==='go-to-market'){
-   showPage('market');
-  }
+<!-- ========= SOCIALS ========= -->
+<div id="socials" class="page">
+<h2>Соцсети</h2>
+<div class="btn" data-action="back">← Назад</div>
+</div>
 
-  else if(action==='go-to-services'){
-   showPage('services');
-  }
 
-  else if(action==='go-to-partners'){
-   showPage('partners');
-  }
+<!-- ========= DONATE ========= -->
+<div id="donate" class="page">
+<h2>На Кибервискас 🐱</h2>
 
-  else if(action==='go-to-socials'){
-   showPage('socials');
-  }
+<div class="btn" data-action="pay-crypto">₿ Crypto</div>
+<div class="btn" data-action="pay-card">💳 Card</div>
+<div class="btn" data-action="pay-stars">⭐ Stars</div>
 
-  else if(action==='go-to-donate'){
-   showPage('donate');
-  }
+<div class="btn" data-action="back">← Назад</div>
 
-  else if(action==='go-to-payment'){
-   const product=btn.dataset.product;
-   const title=product==='alice'?'Алиса ИИ безлимит':'Личный ИИ бот';
-   document.getElementById('payment-title').textContent='Оплата: '+title;
-   showPage('payment');
-  }
+</div>
 
-  else if(action==='pay-crypto'){
-   tg.showAlert('Крипто оплата скоро будет доступна');
-  }
+</div>
 
-  else if(action==='pay-card'){
-   tg.showAlert('Оплата картой скоро будет доступна');
-  }
+<script src="app.js"></script>
 
-  else if(action==='pay-stars'){
-   tg.showAlert('Оплата Stars скоро будет доступна');
-  }
-
-  /* =======================
-     НОВЫЕ AI ФУНКЦИИ
-  ======================= */
-
-  else if(action==='special-function'){
-
-   const fn=btn.dataset.function;
-   const name=btn.innerText.trim();
-
-   tg.sendData(JSON.stringify({
-    action:"special_function",
-    function:fn
-   }));
-
-   tg.showAlert("Запускаем "+name+" в боте...");
-   setTimeout(()=>tg.close(),500);
-  }
-
- });
-});
-
-document.querySelector('.lang-switch')
-?.addEventListener('click',()=>{
- tg.showAlert('Переключение языка в разработке');
-});
-
-</script>
+</body>
+</html>
