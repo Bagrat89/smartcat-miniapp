@@ -6,45 +6,85 @@
   <title>Smartcat Miniapp</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;700&display=swap" rel="stylesheet"/>
+  
   <style>
-    /* твои старые стили остаются */
+    /* Все твои старые стили остаются здесь без изменений */
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Exo 2', sans-serif; height: 100dvh; overflow: hidden; background: #000; color: #fff; }
-    .container { height: 100dvh; display: flex; flex-direction: column; padding: 0px 6px 6px 6px; gap: 4px; }
 
-    /* ... твои остальные стили ... */
+    body {
+      font-family: 'Exo 2', sans-serif;
+      height: 100dvh;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+    }
 
-    /* новые стили для кнопок Особых функций */
+    .container {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 0px 6px 6px 6px;
+      gap: 4px;
+    }
+
+    /* ... (вставь сюда все свои старые стили полностью) ... */
+
+    /* ── Добавленные стили только для блока Особые функции ── */
     .special-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 12px;
-      padding: 12px;
+      padding: 12px 6px;
     }
+
     .special-btn {
-      background: rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(0, 240, 255, 0.3);
+      background: rgba(0, 240, 255, 0.10);
+      border: 1px solid rgba(0, 240, 255, 0.25);
       border-radius: 12px;
-      padding: 16px 8px;
+      padding: 14px 8px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s ease;
+      backdrop-filter: blur(4px);
     }
+
     .special-btn:hover {
-      background: rgba(0, 240, 255, 0.25);
-      transform: scale(1.03);
+      background: rgba(0, 240, 255, 0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 240, 255, 0.15);
     }
-    .special-btn .emoji { font-size: 32px; display: block; margin-bottom: 6px; }
-    .special-btn .label { font-size: 14px; font-weight: 500; }
+
+    .special-btn .emoji {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .special-btn .label {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ... твои старые блоки (баннер, меню и т.д.) ... -->
 
-    <!-- Раздел Особые функции (заменяй только этот блок, если он уже есть) -->
-    <div id="features" class="page">
+  <div class="container">
+
+    <!-- ── ТВОЯ ЗАГЛАВНАЯ СТРАНИЦА (баннер, меню и т.д.) ── -->
+    <!-- Оставляем всё как было, не трогаем -->
+    <!-- ... твой старый код баннера, главной страницы, кнопок с картинками ... -->
+
+    <!-- ── Блок Особые функции (обновлённый) ── -->
+    <div id="features" class="page" style="display:none;">  <!-- display:none — чтобы не открывался сразу -->
+
       <div class="title">🛠️ Особые функции</div>
+
       <div class="special-grid">
 
         <div class="special-btn" data-action="special-image">
@@ -69,7 +109,7 @@
 
         <div class="special-btn" data-action="special-crypto">
           <span class="emoji">₿💱</span>
-          <span class="label">Крипто курс + конвертер</span>
+          <span class="label">Курс крипты + конвертер</span>
         </div>
 
         <div class="special-btn" data-action="special-smarthome">
@@ -84,7 +124,7 @@
 
         <div class="special-btn" data-action="special-qr">
           <span class="emoji">🔲</span>
-          <span class="label">QR-код</span>
+          <span class="label">Генерация QR</span>
         </div>
 
         <div class="special-btn" data-action="special-translate">
@@ -102,46 +142,47 @@
           <span class="label">Суммаризация статьи</span>
         </div>
 
+        <!-- Кнопка назад (если нужно — адаптируй под свой стиль) -->
         <div class="btn back-btn" data-action="back">
           <span class="emoji">←</span>
           <span class="label">Назад</span>
         </div>
+
       </div>
     </div>
 
-    <!-- ... остальные твои страницы ... -->
+    <!-- ... остальные твои страницы (market, socials, donate и т.д.) ... -->
+
   </div>
 
   <script>
-    // твой старый код ...
+    // ── ТВОЙ СТАРЫЙ JS-КОД ОСТАЁТСЯ БЕЗ ИЗМЕНЕНИЙ ──
+    // ... весь твой существующий скрипт ...
 
-    // добавь это в конец обработчика кликов (где btn.addEventListener)
-    btn.addEventListener('click', () => {
-      const action = btn.dataset.action;
+    // Добавь это в конец обработчика кликов (где btn.addEventListener('click', ...))
+    // или создай новый if-блок
 
-      // ... твои старые действия ...
+    if (action.startsWith('special-')) {
+      const func = action.replace('special-', '');
 
-      if (action.startsWith('special-')) {
-        const func = action.replace('special-', '');
+      // Пока заглушка для фронтовых функций
+      if (['qr', 'translate', 'crypto'].includes(func)) {
+        tg.showAlert(`Открываем ${func}... (в разработке)`);
+        // здесь позже будет реальная реализация на фронте
+      } 
+      // Остальные функции — отправляем в бота
+      else {
+        Telegram.WebApp.sendData(JSON.stringify({
+          action: 'special_function',
+          function: func
+        }));
 
-        // функции на фронте (пока заглушки)
-        if (func === 'qr' || func === 'translate' || func === 'crypto') {
-          tg.showAlert(`Открываем ${func}... (в разработке)`);
-          // позже здесь будет реальная логика
-        } 
-        // все остальные — в бот
-        else {
-          Telegram.WebApp.sendData(JSON.stringify({
-            action: 'special_function',
-            function: func
-          }));
-          tg.showAlert(`Открываем ${func} в боте...`);
-          tg.close(); // закрываем миниапп → бот сразу ответит
-        }
+        tg.showAlert(`Запускаем ${func} в боте...`);
+        tg.close();  // закрываем миниапп → бот сразу ответит
       }
+    }
 
-      // ... остальной твой код ...
-    });
+    // ... остальной твой код ...
   </script>
 </body>
 </html>
