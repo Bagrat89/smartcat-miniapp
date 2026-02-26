@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>APK Library</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --cyan: #00f0ff;
+    --magenta: #ff00aa;
+    --yellow: #ffee00;
+    --dark: #020510;
+    --dark2: #060d1f;
+    --card: #080f20;
+    --border: rgba(0,240,255,0.15);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--dark);
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,240,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,240,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(2,5,16,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px 10px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+    letter-spacing: 3px;
+  }
+
+  .logo span { color: var(--magenta); }
+
+  .count-badge {
+    font-size: 10px;
+    color: rgba(0,240,255,0.5);
+    letter-spacing: 2px;
+  }
+
+  /* Поиск */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    background: rgba(0,240,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--cyan); }
+  .search-input::placeholder { color: rgba(255,255,255,0.25); }
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  /* Фильтры */
+  .filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    flex-shrink: 0;
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: transparent;
+    color: rgba(0,240,255,0.6);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn.active {
+    border-color: var(--cyan);
+    color: var(--dark);
+    background: var(--cyan);
+  }
+
+  /* ── КОНТЕНТ ── */
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 16px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--yellow);
+    text-shadow: 0 0 8px var(--yellow);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,238,0,0.3), transparent);
+  }
+
+  /* ── КАРТОЧКА ── */
+  .app-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .app-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .app-card:active {
+    border-color: rgba(0,240,255,0.4);
+    box-shadow: 0 0 15px rgba(0,240,255,0.1);
+  }
+
+  .app-card:active::before { opacity: 1; }
+
+  .app-icon {
+    font-size: 36px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,240,255,0.06);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(0,240,255,0.2));
+  }
+
+  .app-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .app-info { flex: 1; min-width: 0; }
+
+  .app-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-dev {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+
+  .app-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .app-meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .app-rating {
+    font-size: 11px;
+    color: var(--yellow);
+  }
+
+  .app-size {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .app-downloads {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .app-source {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    margin-left: auto;
+  }
+
+  .source-play {
+    background: rgba(0,200,100,0.15);
+    border: 1px solid rgba(0,200,100,0.3);
+    color: #00c864;
+  }
+
+  .source-fdroid {
+    background: rgba(0,150,255,0.15);
+    border: 1px solid rgba(0,150,255,0.3);
+    color: #0096ff;
+  }
+
+  .app-category-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(0,240,255,0.08);
+    border: 1px solid rgba(0,240,255,0.2);
+    color: rgba(0,240,255,0.6);
+    letter-spacing: 1px;
+  }
+
+  /* ── FDROID СЕКЦИЯ ── */
+  .fdroid-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .fdroid-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .fdroid-card:active { border-color: rgba(0,150,255,0.5); }
+
+  .fdroid-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: rgba(0,150,255,0.1);
+  }
+
+  .fdroid-icon-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(0,150,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .fdroid-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fdroid-summary {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .fdroid-dl-btn {
+    margin-top: auto;
+    padding: 5px;
+    background: rgba(0,150,255,0.1);
+    border: 1px solid rgba(0,150,255,0.3);
+    border-radius: 6px;
+    color: #0096ff;
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+
+  /* Загрузка */
+  .loading {
+    text-align: center;
+    padding: 30px;
+    color: rgba(0,240,255,0.4);
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  .loading-dots::after {
+    content: '...';
+    animation: dots 1.5s infinite;
+  }
+
+  @keyframes dots {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+  }
+
+  .error-msg {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255,100,100,0.6);
+    font-size: 11px;
+  }
+
+  /* Пусто */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(0,240,255,0.3);
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  /* Разделитель */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">APK<span>.</span>LIB</div>
+    <div class="count-badge" id="total-count">ЗАГРУЗКА...</div>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" id="search" placeholder="Поиск приложений..." oninput="filterApps()">
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-cat="all" onclick="setFilter('all', this)">ВСЕ</button>
+    <button class="filter-btn" data-cat="ИИ" onclick="setFilter('ИИ', this)">ИИ</button>
+    <button class="filter-btn" data-cat="Утилиты" onclick="setFilter('Утилиты', this)">УТИЛИТЫ</button>
+    <button class="filter-btn" data-cat="Приватность" onclick="setFilter('Приватность', this)">ПРИВАТНОСТЬ</button>
+    <button class="filter-btn" data-cat="Продуктивность" onclick="setFilter('Продуктивность', this)">ПРОДУКТИВНОСТЬ</button>
+    <button class="filter-btn" data-cat="fdroid" onclick="setFilter('fdroid', this)">F-DROID</button>
+  </div>
+</div>
+
+<div class="content">
+  <!-- Избранные -->
+  <div id="featured-section">
+    <div class="section-title">⭐ ИЗБРАННЫЕ</div>
+    <div id="featured-list"></div>
+  </div>
+
+  <div class="divider" id="divider"></div>
+
+  <!-- F-Droid -->
+  <div id="fdroid-section">
+    <div class="section-title">📦 F-DROID — OPEN SOURCE</div>
+    <div id="fdroid-list" class="fdroid-grid">
+      <div class="loading" style="grid-column:1/-1">
+        <span class="loading-dots">ЗАГРУЗКА F-DROID</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+let allFeatured = [];
+let allFdroid = [];
+let currentFilter = 'all';
+let searchQuery = '';
+
+// ── ЗАГРУЗКА ИЗБРАННЫХ ──
+async function loadFeatured() {
+  try {
+    const res = await fetch('./apps.json?v=' + Date.now());
+    const data = await res.json();
+    allFeatured = data.featured || [];
+    renderFeatured();
+  } catch (e) {
+    document.getElementById('featured-list').innerHTML =
+      '<div class="error-msg">Не удалось загрузить список приложений</div>';
+  }
+}
+
+// ── ЗАГРУЗКА F-DROID ──
+async function loadFdroid() {
+  const packageIds = [
+    'com.termux',
+    'org.mozilla.fennec_fdroid',
+    'com.nextcloud.client',
+    'org.videolan.vlc',
+    'com.github.libretube',
+    'net.osmand.plus',
+    'org.telegram.messenger',
+    'de.blau.android',
+    'com.ichi2.anki',
+    'org.sufficientlysecure.keychain',
+    'com.kunzisoft.keepass.libre',
+    'me.ccrama.redditslide',
+    'org.schabi.newpipe',
+    'com.aurora.store',
+    'org.fossify.filemanager',
+    'com.simplemobiletools.gallery.pro',
+    'org.fossify.contacts',
+    'com.ghostsq.commander',
+  ];
+
+  try {
+    const results = [];
+    // Загружаем пакетами по 6
+    const chunks = [];
+    for (let i = 0; i < packageIds.length; i += 6) {
+      chunks.push(packageIds.slice(i, i + 6));
+    }
+
+    for (const chunk of chunks) {
+      const promises = chunk.map(async (pkg) => {
+        try {
+          const res = await fetch(`https://f-droid.org/api/v1/packages/${pkg}`);
+          if (!res.ok) return null;
+          const data = await res.json();
+          return {
+            id: pkg,
+            name: data.name || pkg.split('.').pop(),
+            summary: data.summary || '',
+            icon: `https://f-droid.org/repo/icons-640/${pkg}.${data.suggestedVersionCode || '0'}.png`,
+            url: `https://f-droid.org/packages/${pkg}/`,
+            version: data.suggestedVersionName || '',
+            category: mapFdroidCategory(data.categories || [])
+          };
+        } catch { return null; }
+      });
+      const res = await Promise.all(promises);
+      results.push(...res.filter(Boolean));
+    }
+
+    allFdroid = results;
+    renderFdroid();
+  } catch (e) {
+    document.getElementById('fdroid-list').innerHTML =
+      '<div class="error-msg" style="grid-column:1/-1">Не удалось загрузить F-Droid</div>';
+  }
+}
+
+function mapFdroidCategory(cats) {
+  if (!cats.length) return 'Утилиты';
+  const c = cats[0].toLowerCase();
+  if (c.includes('internet') || c.includes('network')) return 'Интернет';
+  if (c.includes('security') || c.includes('privacy')) return 'Приватность';
+  if (c.includes('multimedia') || c.includes('video')) return 'Медиа';
+  if (c.includes('navigation')) return 'Навигация';
+  if (c.includes('education')) return 'Образование';
+  return 'Утилиты';
+}
+
+// ── РЕНДЕР ИЗБРАННЫХ ──
+function renderFeatured() {
+  const list = document.getElementById('featured-list');
+  const query = searchQuery.toLowerCase();
+
+  let apps = allFeatured.filter(app => {
+    const matchCat = currentFilter === 'all' || currentFilter === 'fdroid'
+      ? currentFilter !== 'fdroid'
+      : app.category === currentFilter;
+    const matchSearch = !query ||
+      app.name.toLowerCase().includes(query) ||
+      app.description.toLowerCase().includes(query) ||
+      app.developer.toLowerCase().includes(query);
+    return matchCat && matchSearch;
+  });
+
+  if (apps.length === 0) {
+    list.innerHTML = '';
+    document.getElementById('featured-section').style.display =
+      currentFilter === 'fdroid' ? 'none' : 'block';
+    if (currentFilter !== 'fdroid') {
+      list.innerHTML = '<div class="empty">Ничего не найдено</div>';
+    }
+    return;
+  }
+
+  document.getElementById('featured-section').style.display = 'block';
+  list.innerHTML = apps.map(app => `
+    <div class="app-card" onclick="openApp('${app.url}')">
+      <div class="app-icon">${app.icon}</div>
+      <div class="app-info">
+        <div class="app-name">${app.name}</div>
+        <div class="app-dev">${app.developer}</div>
+        <div class="app-desc">${app.description}</div>
+        <div class="app-meta">
+          <span class="app-rating">★ ${app.rating}</span>
+          <span class="app-size">${app.size}</span>
+          <span class="app-downloads">↓ ${app.downloads}</span>
+          <span class="app-source ${app.source === 'google_play' ? 'source-play' : 'source-fdroid'}">
+            ${app.source === 'google_play' ? 'PLAY' : 'F-DROID'}
+          </span>
+        </div>
+      </div>
+      <div class="app-category-badge">${app.category.toUpperCase()}</div>
+    </div>
+  `).join('');
+
+  updateCount();
+}
+
+// ── РЕНДЕР F-DROID ──
+function renderFdroid() {
+  const list = document.getElementById('fdroid-list');
+  const query = searchQuery.toLowerCase();
+
+  let apps = allFdroid.filter(app => {
+    const matchCat = currentFilter === 'all' || currentFilter === 'fdroid'
+      ? true
+      : app.category === currentFilter;
+    const matchSearch = !query ||
+      app.name.toLowerCase().includes(query) ||
+      app.summary.toLowerCase().includes(query);
+    return matchCat && matchSearch;
+  });
+
+  const fdroidSection = document.getElementById('fdroid-section');
+
+  if (currentFilter !== 'all' && currentFilter !== 'fdroid' &&
+      !['Утилиты','Приватность','Интернет','Медиа'].includes(currentFilter)) {
+    fdroidSection.style.display = 'none';
+    document.getElementById('divider').style.display = 'none';
+    return;
+  }
+
+  fdroidSection.style.display = 'block';
+  document.getElementById('divider').style.display = 'block';
+
+  if (apps.length === 0) {
+    list.innerHTML = '<div class="empty" style="grid-column:1/-1">Ничего не найдено</div>';
+    return;
+  }
+
+  list.innerHTML = apps.map(app => `
+    <div class="fdroid-card" onclick="openApp('${app.url}')">
+      <img class="fdroid-icon" src="${app.icon}" alt="${app.name}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="fdroid-icon-placeholder" style="display:none">📦</div>
+      <div class="fdroid-name">${app.name}</div>
+      <div class="fdroid-summary">${app.summary || 'Open source приложение'}</div>
+      <div class="fdroid-dl-btn">↓ F-DROID</div>
+    </div>
+  `).join('');
+
+  updateCount();
+}
+
+function updateCount() {
+  const featured = document.querySelectorAll('.app-card').length;
+  const fdroid = document.querySelectorAll('.fdroid-card').length;
+  document.getElementById('total-count').textContent =
+    `${featured + fdroid} ПРИЛОЖЕНИЙ`;
+}
+
+// ── ОТКРЫТЬ ПРИЛОЖЕНИЕ ──
+function openApp(url) {
+  if (tg) {
+    tg.openLink(url);
+  } else {
+    window.open(url, '_blank');
+  }
+}
+
+// ── ФИЛЬТР ──
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFeatured();
+  renderFdroid();
+}
+
+// ── ПОИСК ──
+function filterApps() {
+  searchQuery = document.getElementById('search').value;
+  renderFeatured();
+  renderFdroid();
+}
+
+// ── СТАРТ ──
+loadFeatured();
+loadFdroid();
+</script>
+</body>
+</html>
