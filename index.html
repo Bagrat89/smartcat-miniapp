@@ -1073,13 +1073,20 @@ setTimeout(() => { tg.close(); }, 400);
         const remind_at = Math.floor(new Date(`${date}T${timeVal}:00`).getTime() / 1000);
         const now = Math.floor(Date.now() / 1000);
         if (remind_at > now) {
-          tg.sendData(JSON.stringify({
-            action: 'diary',
-            sub: 'add_reminder',
-            text: text,
-            remind_at: remind_at
-          }));
-          tg.showAlert(`⏰ Напоминание установлено!\nБот напомнит ${date} в ${timeVal}`);
+          const encoded = btoa(encodeURIComponent(text)).replace(/=/g, '');
+          tg.showPopup({
+            title: '⏰ Установить напоминание?',
+            message: `${date} в ${timeVal}\n\n${text}`,
+            buttons: [
+              { id: 'confirm', type: 'default', text: 'Установить' },
+              { id: 'cancel', type: 'cancel', text: 'Только сохранить' }
+            ]
+          }, (btnId) => {
+            if (btnId === 'confirm') {
+              tg.openTelegramLink(`https://t.me/Alicesmartcat_bot?start=reminder_${remind_at}_${encoded}`);
+              setTimeout(() => { tg.close(); }, 400);
+            }
+          });
         } else {
           tg.showAlert('⚠️ Указанное время уже прошло. Заметка сохранена без напоминания.');
         }
