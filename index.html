@@ -550,7 +550,61 @@
         </div>
       </div>
     </div>
+<!-- ─── Умный дом (Tuya) ──────────────────────────────── -->
+    <div id="smarthome" class="page">
+      <div class="title">🏠 Умный дом</div>
+      <div style="padding:10px;">
 
+        <!-- Инструкция -->
+        <div id="sh-help" style="margin-bottom:12px;padding:10px;border-radius:8px;border:1px solid #333;background:#0d0d1f;font-size:13px;color:#aaa;">
+          Для подключения нужны <b style="color:#00f0ff;">Tuya Client ID</b> и <b style="color:#00f0ff;">Client Secret</b>.<br><br>
+          Как получить: зарегистрируйся на
+          <span style="color:#00f0ff;cursor:pointer;" onclick="Telegram.WebApp.openLink('https://iot.tuya.com')">iot.tuya.com</span>
+          → создай проект → скопируй Client ID и Secret.
+        </div>
+
+        <!-- Форма credentials -->
+        <div id="sh-form">
+          <select id="sh-region" style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;margin-bottom:8px;">
+            <option value="eu">Европа (eu)</option>
+            <option value="us">США (us)</option>
+            <option value="cn">Китай (cn)</option>
+            <option value="in">Индия (in)</option>
+          </select>
+          <input id="sh-client-id" type="text" placeholder="Client ID"
+            style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;box-sizing:border-box;margin-bottom:8px;">
+          <input id="sh-client-secret" type="password" placeholder="Client Secret"
+            style="width:100%;padding:8px;border-radius:8px;border:1px solid #00f0ff;background:#0a0a1a;color:#fff;font-size:15px;box-sizing:border-box;margin-bottom:8px;">
+          <button onclick="shSaveCredentials()"
+            style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:8px;">
+            Сохранить и подключить
+          </button>
+        </div>
+
+        <!-- Список устройств -->
+        <div id="sh-devices" style="display:none;">
+          <button onclick="shLoadDevices()"
+            style="width:100%;padding:10px;border-radius:8px;background:#00f0ff;color:#000;font-weight:bold;font-size:15px;border:none;cursor:pointer;margin-bottom:12px;">
+            🔄 Обновить устройства
+          </button>
+          <div id="sh-devices-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <button onclick="shDeleteCredentials()"
+            style="width:100%;margin-top:12px;padding:8px;border-radius:8px;background:transparent;border:1px solid #f00;color:#f00;font-size:13px;cursor:pointer;">
+            🗑️ Удалить мои данные
+          </button>
+        </div>
+
+        <div id="sh-status" style="margin-top:10px;text-align:center;color:#00f0ff;font-size:14px;min-height:20px;"></div>
+      </div>
+      <div style="padding:0 10px 10px;">
+        <div class="btn" data-action="back">
+          <div class="btn-content">
+            <span style="font-size:22px;margin-bottom:3px;">←</span>
+            <span class="btn-label" style="color:#00f0ff;">Назад</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- ─── Крипто ─────────────────────────────────────────── -->
     <div id="crypto" class="page">
       <div class="title">₿ Курс криптовалют</div>
@@ -840,7 +894,7 @@ setTimeout(() => { tg.close(); }, 400);
           showPage('crypto');
 
         } else if (action === 'feature-smarthome') {
-          tg.showAlert('🏠 Управление умным домом — функция в разработке. Скоро будет доступна!');
+          showPage('smarthome');
 
         } else if (action === 'feature-diary') {
           showPage('diary');
@@ -890,7 +944,78 @@ setTimeout(() => { tg.close(); }, 400);
     document.querySelector('.lang-switch').addEventListener('click', () => {
       tg.showAlert('Переключение языка в разработке');
     });
+// ─── Умный дом (Tuya) ────────────────────────────────────
+    let shCredentialsSaved = false;
 
+    function shSetStatus(msg) {
+      document.getElementById('sh-status').textContent = msg;
+      setTimeout(() => { document.getElementById('sh-status').textContent = ''; }, 3000);
+    }
+
+    function shSaveCredentials() {
+      const clientId = document.getElementById('sh-client-id').value.trim();
+      const clientSecret = document.getElementById('sh-client-secret').value.trim();
+      const region = document.getElementById('sh-region').value;
+      if (!clientId || !clientSecret) {
+        tg.showAlert('Заполните Client ID и Client Secret');
+        return;
+      }
+      tg.sendData(JSON.stringify({
+        action: 'smart_home',
+        sub: 'save_credentials',
+        client_id: clientId,
+        client_secret: clientSecret,
+        region: region
+      }));
+      shCredentialsSaved = true;
+      document.getElementById('sh-form').style.display = 'none';
+      document.getElementById('sh-devices').style.display = 'block';
+      shSetStatus('✅ Данные отправлены боту');
+    }
+
+    function shLoadDevices() {
+      document.getElementById('sh-devices-list').innerHTML = '<div style="color:#888;text-align:center;">Загрузка...</div>';
+      tg.sendData(JSON.stringify({ action: 'smart_home', sub: 'get_devices' }));
+    }
+
+    function shToggle(deviceId, state) {
+      tg.sendData(JSON.stringify({
+        action: 'smart_home',
+        sub: 'toggle',
+        device_id: deviceId,
+        state: state
+      }));
+      shSetStatus(state ? '🟢 Включаю...' : '⚫ Выключаю...');
+    }
+
+    function shSetBrightness(deviceId, value) {
+      tg.sendData(JSON.stringify({
+        action: 'smart_home',
+        sub: 'brightness',
+        device_id: deviceId,
+        value: value
+      }));
+      shSetStatus(`💡 Яркость: ${value}`);
+    }
+
+    function shDeleteCredentials() {
+      tg.showPopup({
+        title: 'Удалить данные?',
+        message: 'Tuya credentials будут удалены из бота.',
+        buttons: [
+          { id: 'confirm', type: 'destructive', text: 'Удалить' },
+          { id: 'cancel', type: 'cancel', text: 'Отмена' }
+        ]
+      }, (btnId) => {
+        if (btnId === 'confirm') {
+          tg.sendData(JSON.stringify({ action: 'smart_home', sub: 'delete_credentials' }));
+          document.getElementById('sh-form').style.display = 'block';
+          document.getElementById('sh-devices').style.display = 'none';
+          document.getElementById('sh-client-id').value = '';
+          document.getElementById('sh-client-secret').value = '';
+        }
+      });
+    }
     // ─── Крипто ───────────────────────────────────────────────
     async function convertCrypto() {
       const amount = parseFloat(document.getElementById('crypto-amount').value) || 1;
