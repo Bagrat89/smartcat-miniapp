@@ -1084,10 +1084,12 @@ setTimeout(() => { tg.close(); }, 400);
             ]
           }, (btnId) => {
             if (btnId === 'confirm') {
-              tg.close();
-              setTimeout(() => {
-                window.open(`https://t.me/Alicesmartcat_bot?start=reminder_${remind_at}_${encoded}`, '_blank');
-              }, 300);
+              tg.sendData(JSON.stringify({
+                action: 'diary',
+                sub: 'add_reminder',
+                text: text,
+                remind_at: remind_at
+              }));
             }
           });
         } else {
