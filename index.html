@@ -1073,25 +1073,12 @@ setTimeout(() => { tg.close(); }, 400);
         const remind_at = Math.floor(new Date(`${date}T${timeVal}:00`).getTime() / 1000);
         const now = Math.floor(Date.now() / 1000);
         if (remind_at > now) {
-          const encoded = btoa(unescape(encodeURIComponent(text)))
-            .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-          tg.showPopup({
-            title: '⏰ Установить напоминание?',
-            message: `${date} в ${timeVal}\n\n${text}`,
-            buttons: [
-              { id: 'confirm', type: 'default', text: 'Установить' },
-              { id: 'cancel', type: 'cancel', text: 'Только сохранить' }
-            ]
-          }, (btnId) => {
-            if (btnId === 'confirm') {
-              tg.sendData(JSON.stringify({
-                action: 'diary',
-                sub: 'add_reminder',
-                text: text,
-                remind_at: remind_at
-              }));
-            }
-          });
+          tg.sendData(JSON.stringify({
+            action: 'diary',
+            sub: 'add_reminder',
+            text: text,
+            remind_at: remind_at
+          }));
         } else {
           tg.showAlert('⚠️ Указанное время уже прошло. Заметка сохранена без напоминания.');
         }
