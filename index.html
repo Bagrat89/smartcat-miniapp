@@ -743,8 +743,14 @@
 
 <script>
     const tg = Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+tg.ready();
+tg.expand();
+
+tg.onEvent('viewportChanged', function() {
+    if (!tg.isExpanded) {
+        tg.expand();
+    }
+});
     tg.MainButton.hide();
 
     // Стек истории для возврата назад
