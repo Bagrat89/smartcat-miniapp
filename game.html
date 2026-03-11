@@ -154,6 +154,23 @@
     letter-spacing: 2px;
   }
 
+  .nick-input {
+    background: rgba(0,240,255,0.05);
+    border: 1px solid rgba(0,240,255,0.3);
+    border-radius: 6px;
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    padding: 8px 16px;
+    text-align: center;
+    outline: none;
+    letter-spacing: 2px;
+    width: 220px;
+    transition: border-color 0.2s;
+  }
+  .nick-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,240,255,0.2); }
+  .nick-input::placeholder { color: rgba(0,240,255,0.3); }
+
   /* ── ИГРА ── */
   #screen-game {
     display: none;
@@ -380,6 +397,7 @@
   <div class="logo">ALICE<span>.</span>RUN</div>
   <div class="tagline">Cyber Cat // Neural Runner v2.0</div>
   <div class="cat-preview">😼</div>
+  <input class="nick-input" id="nick-input" type="text" maxlength="16" placeholder="ВАШ НИК..." />
   <button class="btn-start" onclick="startGame()">[ ЗАПУСТИТЬ ]</button>
   <button class="btn-start" style="border-color:var(--yellow);color:var(--yellow);box-shadow:0 0 20px rgba(255,238,0,0.2);font-size:12px;padding:10px 28px;" onclick="showLeaderboard()">[ РЕКОРДЫ ]</button>
   <div class="controls-hint">ПРОБЕЛ / ТАП — ПРЫЖОК &nbsp;|&nbsp; ДВОЙНОЙ ПРЫЖОК</div>
@@ -421,6 +439,152 @@
 
 <script>
 // ══════════════════════════════════════════════════════
+//  ЗВУК (Web Audio API)
+// ══════════════════════════════════════════════════════
+let audioCtx = null;
+let musicNodes = {};
+let musicPlaying = false;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playSound(type) {
+  try {
+    const ac = getAudioCtx();
+    if (ac.state === 'suspended') ac.resume();
+
+    if (type === 'jump') {
+      // Прыжок — быстрый восходящий свип
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain); gain.connect(ac.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300, ac.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(800, ac.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.25, ac.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.18);
+      osc.start(ac.currentTime);
+      osc.stop(ac.currentTime + 0.18);
+
+    } else if (type === 'coin') {
+      // Монета — два тона
+      [0, 0.08].forEach((delay, i) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.connect(gain); gain.connect(ac.destination);
+        osc.type = 'triangle';
+        osc.frequency.value = i === 0 ? 880 : 1320;
+        gain.gain.setValueAtTime(0.2, ac.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + delay + 0.15);
+        osc.start(ac.currentTime + delay);
+        osc.stop(ac.currentTime + delay + 0.15);
+      });
+
+    } else if (type === 'hit') {
+      // Удар — шум + низкий тон
+      const buf = ac.createBuffer(1, ac.sampleRate * 0.25, ac.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+      const src = ac.createBufferSource();
+      src.buffer = buf;
+      const filter = ac.createBiquadFilter();
+      filter.type = 'lowpass'; filter.frequency.value = 400;
+      const gain = ac.createGain();
+      gain.gain.value = 0.35;
+      src.connect(filter); filter.connect(gain); gain.connect(ac.destination);
+      src.start(ac.currentTime);
+
+      const osc = ac.createOscillator();
+      const g2 = ac.createGain();
+      osc.connect(g2); g2.connect(ac.destination);
+      osc.type = 'sawtooth'; osc.frequency.value = 120;
+      g2.gain.setValueAtTime(0.3, ac.currentTime);
+      g2.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.3);
+      osc.start(ac.currentTime); osc.stop(ac.currentTime + 0.3);
+    }
+  } catch(e) {}
+}
+
+function startMusic() {
+  try {
+    if (musicPlaying) return;
+    const ac = getAudioCtx();
+    if (ac.state === 'suspended') ac.resume();
+    musicPlaying = true;
+
+    // Синтбасс — пульсирующий ритм
+    const bassLoop = () => {
+      if (!musicPlaying) return;
+      const notes = [55, 55, 73.4, 55, 65.4, 55, 49, 55];
+      let t = ac.currentTime;
+      notes.forEach((freq, i) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        const filter = ac.createBiquadFilter();
+        filter.type = 'lowpass'; filter.frequency.value = 300;
+        osc.connect(filter); filter.connect(gain); gain.connect(ac.destination);
+        osc.type = 'sawtooth'; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, t + i * 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.25 + 0.2);
+        osc.start(t + i * 0.25);
+        osc.stop(t + i * 0.25 + 0.22);
+      });
+      musicNodes.bassTimer = setTimeout(bassLoop, notes.length * 250);
+    };
+    bassLoop();
+
+    // Арпеджио — неоновая мелодия
+    const arpLoop = () => {
+      if (!musicPlaying) return;
+      const melody = [523, 659, 784, 1047, 784, 659, 523, 440];
+      let t = ac.currentTime;
+      melody.forEach((freq, i) => {
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.connect(gain); gain.connect(ac.destination);
+        osc.type = 'square'; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.04, t + i * 0.125);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.125 + 0.1);
+        osc.start(t + i * 0.125);
+        osc.stop(t + i * 0.125 + 0.11);
+      });
+      musicNodes.arpTimer = setTimeout(arpLoop, melody.length * 125);
+    };
+    setTimeout(arpLoop, 500);
+
+    // Удар барабана
+    const drumLoop = () => {
+      if (!musicPlaying) return;
+      const pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,1,0];
+      let t = ac.currentTime;
+      pattern.forEach((hit, i) => {
+        if (!hit) return;
+        const buf = ac.createBuffer(1, ac.sampleRate * 0.05, ac.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let j = 0; j < data.length; j++) data[j] = (Math.random()*2-1) * (1 - j/data.length);
+        const src = ac.createBufferSource();
+        src.buffer = buf;
+        const gain = ac.createGain(); gain.gain.value = 0.18;
+        src.connect(gain); gain.connect(ac.destination);
+        src.start(t + i * 0.125);
+      });
+      musicNodes.drumTimer = setTimeout(drumLoop, pattern.length * 125);
+    };
+    drumLoop();
+
+  } catch(e) {}
+}
+
+function stopMusic() {
+  musicPlaying = false;
+  clearTimeout(musicNodes.bassTimer);
+  clearTimeout(musicNodes.arpTimer);
+  clearTimeout(musicNodes.drumTimer);
+}
+
+// ══════════════════════════════════════════════════════
 //  КОНСТАНТЫ
 // ══════════════════════════════════════════════════════
 const GRAVITY = 0.55;
@@ -444,7 +608,8 @@ let speed;
 // Telegram user
 const tg = window.Telegram?.WebApp;
 const userId = tg?.initDataUnsafe?.user?.id || 0;
-const userName = tg?.initDataUnsafe?.user?.first_name || 'Аноним';
+const tgName = tg?.initDataUnsafe?.user?.first_name || '';
+let userName = tgName || 'RUNNER';
 
 // ══════════════════════════════════════════════════════
 //  ИНИЦИАЛИЗАЦИЯ CANVAS
@@ -491,6 +656,7 @@ function catJump() {
     cat.jumps++;
     cat.onGround = false;
     spawnJumpParticles();
+    playSound('jump');
   }
 }
 
@@ -514,30 +680,167 @@ function updateCat() {
   if (cat.invincible > 0) cat.invincible--;
 }
 
+function drawPixelCat(x, y, w, frame, jumping, invincible) {
+  const s = w / 10; // масштаб
+  ctx.save();
+  ctx.shadowColor = '#ff00aa';
+  ctx.shadowBlur = 18;
+
+  // Тело
+  ctx.fillStyle = '#1a0a2e';
+  ctx.beginPath();
+  ctx.roundRect(x + s, y + s*3, s*8, s*6, s);
+  ctx.fill();
+
+  // Голова
+  ctx.fillStyle = '#1a0a2e';
+  ctx.beginPath();
+  ctx.roundRect(x + s*2, y, s*6, s*5.5, s*1.5);
+  ctx.fill();
+
+  // Уши
+  ctx.fillStyle = '#2a0a3e';
+  // левое ухо
+  ctx.beginPath();
+  ctx.moveTo(x + s*2, y + s);
+  ctx.lineTo(x + s*1, y - s*2);
+  ctx.lineTo(x + s*3.5, y + s*0.5);
+  ctx.fill();
+  // правое ухо
+  ctx.beginPath();
+  ctx.moveTo(x + s*8, y + s);
+  ctx.lineTo(x + s*9, y - s*2);
+  ctx.lineTo(x + s*6.5, y + s*0.5);
+  ctx.fill();
+
+  // Внутри ушей (розовые)
+  ctx.fillStyle = '#ff44aa';
+  ctx.beginPath();
+  ctx.moveTo(x + s*2.2, y + s*0.8);
+  ctx.lineTo(x + s*1.5, y - s*1.2);
+  ctx.lineTo(x + s*3.2, y + s*0.4);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x + s*7.8, y + s*0.8);
+  ctx.lineTo(x + s*8.5, y - s*1.2);
+  ctx.lineTo(x + s*6.8, y + s*0.4);
+  ctx.fill();
+
+  // Неоновый контур тела
+  ctx.strokeStyle = '#ff00aa';
+  ctx.lineWidth = 1.5;
+  ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.roundRect(x + s*2, y, s*6, s*5.5, s*1.5);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.roundRect(x + s, y + s*3, s*8, s*6, s);
+  ctx.stroke();
+
+  // ГЛАЗА — всегда видимые
+  const eyeY = y + s*2;
+  const blinkEye = (frame === 1) && !jumping;
+  if (blinkEye) {
+    // Моргание — линия
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = '#00f0ff';
+    ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.moveTo(x+s*3.2, eyeY+s*0.5); ctx.lineTo(x+s*4.2, eyeY+s*0.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+s*5.8, eyeY+s*0.5); ctx.lineTo(x+s*6.8, eyeY+s*0.5); ctx.stroke();
+  } else {
+    // Глаза открыты
+    ctx.fillStyle = jumping ? '#ffee00' : '#00f0ff';
+    ctx.shadowColor = jumping ? '#ffee00' : '#00f0ff';
+    ctx.shadowBlur = 10;
+    ctx.beginPath(); ctx.ellipse(x+s*3.7, eyeY+s*0.5, s*0.9, s*(jumping?1.1:0.8), 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x+s*6.3, eyeY+s*0.5, s*0.9, s*(jumping?1.1:0.8), 0, 0, Math.PI*2); ctx.fill();
+    // Зрачки
+    ctx.fillStyle = '#000';
+    ctx.shadowBlur = 0;
+    ctx.beginPath(); ctx.arc(x+s*3.9, eyeY+s*0.6, s*0.4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+s*6.5, eyeY+s*0.6, s*0.4, 0, Math.PI*2); ctx.fill();
+    // Блик
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(x+s*3.6, eyeY+s*0.2, s*0.2, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+s*6.2, eyeY+s*0.2, s*0.2, 0, Math.PI*2); ctx.fill();
+  }
+
+  // Нос
+  ctx.fillStyle = '#ff44aa';
+  ctx.shadowColor = '#ff44aa';
+  ctx.shadowBlur = 6;
+  ctx.beginPath(); ctx.ellipse(x+s*5, y+s*3.6, s*0.5, s*0.35, 0, 0, Math.PI*2); ctx.fill();
+
+  // Рот
+  ctx.strokeStyle = '#ff44aa';
+  ctx.lineWidth = 1;
+  ctx.shadowBlur = 4;
+  ctx.beginPath();
+  ctx.moveTo(x+s*5, y+s*3.9);
+  ctx.quadraticCurveTo(x+s*4.2, y+s*4.5, x+s*3.8, y+s*4.2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x+s*5, y+s*3.9);
+  ctx.quadraticCurveTo(x+s*5.8, y+s*4.5, x+s*6.2, y+s*4.2);
+  ctx.stroke();
+
+  // Усы
+  ctx.strokeStyle = 'rgba(0,240,255,0.7)';
+  ctx.lineWidth = 1;
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 4;
+  // левые
+  ctx.beginPath(); ctx.moveTo(x+s*4.5, y+s*3.8); ctx.lineTo(x+s*1.5, y+s*3.2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+s*4.5, y+s*4); ctx.lineTo(x+s*1.5, y+s*4.2); ctx.stroke();
+  // правые
+  ctx.beginPath(); ctx.moveTo(x+s*5.5, y+s*3.8); ctx.lineTo(x+s*8.5, y+s*3.2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+s*5.5, y+s*4); ctx.lineTo(x+s*8.5, y+s*4.2); ctx.stroke();
+
+  // Хвост
+  ctx.strokeStyle = '#ff00aa';
+  ctx.lineWidth = s*1.2;
+  ctx.shadowColor = '#ff00aa';
+  ctx.shadowBlur = 10;
+  ctx.lineCap = 'round';
+  const tailWag = Math.sin(frame * 1.5) * s * 2;
+  ctx.beginPath();
+  ctx.moveTo(x + s*9, y + s*7);
+  ctx.quadraticCurveTo(x + s*12, y + s*5 + tailWag, x + s*11, y + s*3 + tailWag);
+  ctx.stroke();
+
+  // Лапки (бег)
+  ctx.fillStyle = '#1a0a2e';
+  ctx.strokeStyle = '#ff00aa';
+  ctx.lineWidth = 1;
+  ctx.shadowBlur = 6;
+  const legOffset = jumping ? 0 : Math.sin(frame * 1.6) * s * 1.5;
+  // передняя
+  ctx.beginPath(); ctx.roundRect(x+s*2.5, y+s*7.5+legOffset, s*1.8, s*2.5, s*0.5); ctx.fill(); ctx.stroke();
+  // задняя
+  ctx.beginPath(); ctx.roundRect(x+s*5.5, y+s*7.5-legOffset, s*1.8, s*2.5, s*0.5); ctx.fill(); ctx.stroke();
+
+  ctx.restore();
+}
+
 function drawCat() {
   // Трейл
   cat.trail.forEach((p, i) => {
-    const a = (i / cat.trail.length) * 0.3;
+    const a = (i / cat.trail.length) * 0.2;
     ctx.save();
     ctx.globalAlpha = a;
-    ctx.font = `${24 + i*2}px serif`;
-    ctx.fillText('😼', p.x - 12, p.y + 8);
+    ctx.shadowColor = '#ff00aa';
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = 'rgba(255,0,170,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(p.x, p.y, 8 + i*2, 5 + i, 0, 0, Math.PI*2);
+    ctx.fill();
     ctx.restore();
   });
 
   const blink = cat.invincible > 0 && Math.floor(cat.invincible / 4) % 2 === 0;
   if (!blink) {
-    ctx.save();
-    // Свечение
-    ctx.shadowColor = '#ff00aa';
-    ctx.shadowBlur = 15;
-    ctx.font = `${cat.w}px serif`;
-
-    // Бег — смена эмодзи
-    const frames = ['😼','😺','😼','🐱'];
-    const emoji = cat.onGround ? frames[cat.frame] : '😸';
-    ctx.fillText(emoji, cat.x, cat.y + cat.h);
-    ctx.restore();
+    drawPixelCat(cat.x, cat.y, cat.w, cat.frame, !cat.onGround, cat.invincible > 0);
   }
 }
 
@@ -710,106 +1013,280 @@ function drawParticles() {
 // ══════════════════════════════════════════════════════
 //  ФОНОВЫЕ СЛОИ (параллакс)
 // ══════════════════════════════════════════════════════
+// Неоновые цвета для зданий
+const NEON_COLORS = ['#00f0ff','#ff00aa','#ffee00','#00ff88','#aa44ff'];
+
 function createBgLayers() {
   bgLayers = [];
-  // Небоскрёбы дальние
-  const buildings1 = [];
-  for (let i = 0; i < 12; i++) {
-    buildings1.push({
-      x: Math.random() * W,
-      w: 30 + Math.random() * 60,
-      h: H * 0.2 + Math.random() * H * 0.25,
-      color: `rgba(${Math.floor(Math.random()*30)},${Math.floor(Math.random()*30)},${40+Math.floor(Math.random()*40)},0.8)`
-    });
-  }
-  bgLayers.push({ buildings: buildings1, speed: 0.3, offset: 0 });
 
-  // Небоскрёбы ближние
-  const buildings2 = [];
-  for (let i = 0; i < 8; i++) {
-    buildings2.push({
-      x: Math.random() * W,
-      w: 40 + Math.random() * 80,
-      h: H * 0.15 + Math.random() * H * 0.2,
-      color: `rgba(${Math.floor(Math.random()*20)},${Math.floor(Math.random()*40)},${60+Math.floor(Math.random()*40)},0.9)`
+  // Дальние здания (маленькие, медленные)
+  const buildings1 = [];
+  for (let i = 0; i < 14; i++) {
+    const neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+    buildings1.push({
+      x: (W / 14) * i + Math.random() * 30,
+      w: 25 + Math.random() * 45,
+      h: H * 0.18 + Math.random() * H * 0.22,
+      baseColor: `rgba(5,8,25,0.95)`,
+      neon,
+      antennaH: Math.random() > 0.5 ? 8 + Math.random() * 15 : 0,
+      windowTimer: Math.random() * 100
     });
   }
-  bgLayers.push({ buildings: buildings2, speed: 0.7, offset: 0 });
+  bgLayers.push({ buildings: buildings1, speed: 0.25, isFar: true });
+
+  // Ближние здания (крупнее, быстрее)
+  const buildings2 = [];
+  for (let i = 0; i < 9; i++) {
+    const neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+    buildings2.push({
+      x: (W / 9) * i + Math.random() * 40,
+      w: 45 + Math.random() * 75,
+      h: H * 0.12 + Math.random() * H * 0.18,
+      baseColor: `rgba(4,6,20,0.98)`,
+      neon,
+      antennaH: Math.random() > 0.4 ? 10 + Math.random() * 20 : 0,
+      windowTimer: Math.random() * 100,
+      hasSign: Math.random() > 0.6
+    });
+  }
+  bgLayers.push({ buildings: buildings2, speed: 0.65, isFar: false });
+
+  // Летающие машины
+  bgLayers.flyingCars = [];
+  for (let i = 0; i < 5; i++) {
+    bgLayers.flyingCars.push(createFlyingCar());
+  }
+}
+
+function createFlyingCar() {
+  return {
+    x: Math.random() * W,
+    y: H * (0.08 + Math.random() * 0.35),
+    speed: 0.8 + Math.random() * 2.5,
+    w: 28 + Math.random() * 20,
+    h: 10 + Math.random() * 6,
+    color: NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)],
+    dir: Math.random() > 0.5 ? 1 : -1,
+    lightPulse: Math.random() * Math.PI * 2
+  };
 }
 
 function updateBg() {
   bgLayers.forEach(layer => {
-    layer.offset = (layer.offset + layer.speed * (speed / 5)) % W;
+    if (!layer.buildings) return;
+    const spd = layer.speed * (speed / 5);
     layer.buildings.forEach(b => {
-      b.x -= layer.speed * (speed / 5);
+      b.x -= spd;
+      b.windowTimer += 0.05;
       if (b.x + b.w < 0) {
-        b.x = W + Math.random() * 100;
-        b.w = 30 + Math.random() * 80;
-        b.h = H * 0.15 + Math.random() * H * 0.25;
+        b.x = W + 20 + Math.random() * 80;
+        b.w = layer.isFar ? (25 + Math.random() * 45) : (45 + Math.random() * 75);
+        b.h = layer.isFar
+          ? H * 0.18 + Math.random() * H * 0.22
+          : H * 0.12 + Math.random() * H * 0.18;
+        b.neon = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+        b.antennaH = Math.random() > 0.45 ? 8 + Math.random() * 20 : 0;
       }
     });
   });
+  // Летающие машины
+  if (bgLayers.flyingCars) {
+    bgLayers.flyingCars.forEach(car => {
+      car.x += car.speed * car.dir * (speed / 5);
+      car.lightPulse += 0.08;
+      if (car.x > W + 60) car.x = -60;
+      if (car.x < -60) car.x = W + 60;
+    });
+  }
+}
+
+function drawNeonBuilding(b, groundY) {
+  const bx = b.x, by = groundY - b.h, bw = b.w, bh = b.h;
+
+  // Тело здания
+  ctx.fillStyle = b.baseColor;
+  ctx.fillRect(bx, by, bw, bh);
+
+  // Неоновый контур
+  ctx.save();
+  ctx.shadowColor = b.neon;
+  ctx.shadowBlur = 12;
+  ctx.strokeStyle = b.neon;
+  ctx.lineWidth = 1.5;
+  ctx.globalAlpha = 0.7;
+  ctx.strokeRect(bx, by, bw, bh);
+  ctx.restore();
+
+  // Горизонтальные неоновые полосы
+  const stripes = Math.floor(bh / 35);
+  for (let s = 0; s < stripes; s++) {
+    const sy = by + s * 35 + 15;
+    ctx.save();
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = b.neon;
+    ctx.shadowColor = b.neon;
+    ctx.shadowBlur = 6;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(bx, sy); ctx.lineTo(bx + bw, sy); ctx.stroke();
+    ctx.restore();
+  }
+
+  // Окна с анимацией
+  const wCols = Math.floor(bw / 9);
+  const wRows = Math.floor(bh / 13);
+  for (let r = 0; r < wRows; r++) {
+    for (let c = 0; c < wCols; c++) {
+      const seed = (r * 7 + c * 13 + Math.floor(b.windowTimer + r * 0.3)) % 10;
+      if (seed > 3) {
+        const wx = bx + c * 9 + 2;
+        const wy = by + r * 13 + 4;
+        const bright = seed > 7 ? 0.9 : 0.45;
+        ctx.fillStyle = seed > 7 ? b.neon : `rgba(255,238,180,${bright})`;
+        ctx.shadowColor = b.neon;
+        ctx.shadowBlur = seed > 7 ? 8 : 2;
+        ctx.fillRect(wx, wy, 5, 7);
+      }
+    }
+  }
+
+  // Антенна
+  if (b.antennaH > 0) {
+    ctx.save();
+    ctx.strokeStyle = b.neon;
+    ctx.shadowColor = b.neon;
+    ctx.shadowBlur = 10;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(bx + bw * 0.5, by);
+    ctx.lineTo(bx + bw * 0.5, by - b.antennaH);
+    ctx.stroke();
+    // Мигающий огонёк
+    const blink = Math.sin(b.windowTimer * 2) > 0;
+    ctx.fillStyle = blink ? '#ff4444' : 'rgba(255,68,68,0.2)';
+    ctx.shadowColor = '#ff4444';
+    ctx.shadowBlur = blink ? 12 : 2;
+    ctx.beginPath();
+    ctx.arc(bx + bw * 0.5, by - b.antennaH, 2.5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Рекламная вывеска
+  if (b.hasSign) {
+    const signs = ['AI', 'NET', 'DATA', 'SYS', 'RUN'];
+    const sign = signs[Math.floor(b.x * 7 + b.h) % signs.length];
+    ctx.save();
+    ctx.shadowColor = b.neon;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = b.neon;
+    ctx.font = `bold ${Math.min(bw * 0.4, 14)}px 'Share Tech Mono', monospace`;
+    ctx.textAlign = 'center';
+    ctx.globalAlpha = 0.8 + Math.sin(b.windowTimer * 1.5) * 0.2;
+    ctx.fillText(sign, bx + bw * 0.5, by + bh * 0.25);
+    ctx.restore();
+  }
+}
+
+function drawFlyingCar(car) {
+  const { x, y, w, h, color, dir, lightPulse } = car;
+  ctx.save();
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 14;
+
+  // Корпус машины
+  ctx.fillStyle = '#0a0a1a';
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.2;
+  // Основной корпус
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, h * 0.4);
+  ctx.fill();
+  ctx.stroke();
+  // Кабина сверху
+  ctx.beginPath();
+  ctx.roundRect(x + w*0.2, y - h*0.5, w*0.5, h*0.6, h*0.3);
+  ctx.fill();
+  ctx.stroke();
+
+  // Двигатели — неоновые огни снизу
+  const pulseA = 0.5 + Math.sin(lightPulse) * 0.5;
+  ctx.globalAlpha = pulseA;
+  ctx.fillStyle = color;
+  ctx.shadowBlur = 20;
+  ctx.beginPath(); ctx.ellipse(x + w*0.15, y + h*0.8, w*0.08, h*0.25, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(x + w*0.85, y + h*0.8, w*0.08, h*0.25, 0, 0, Math.PI*2); ctx.fill();
+
+  // Лобовые огни
+  ctx.globalAlpha = 0.8;
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = '#fff';
+  ctx.shadowBlur = 10;
+  const lx = dir > 0 ? x + w - 3 : x + 1;
+  ctx.beginPath(); ctx.arc(lx, y + h*0.3, 2, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(lx, y + h*0.7, 2, 0, Math.PI*2); ctx.fill();
+
+  ctx.restore();
 }
 
 function drawBg() {
-  // Небо — градиент
+  // Небо — глубокий градиент
   const sky = ctx.createLinearGradient(0, 0, 0, groundY);
-  sky.addColorStop(0, '#020510');
-  sky.addColorStop(0.6, '#060d1f');
+  sky.addColorStop(0, '#010208');
+  sky.addColorStop(0.4, '#020510');
+  sky.addColorStop(0.75, '#060d1f');
   sky.addColorStop(1, '#0a1530');
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, W, groundY);
 
-  // Луна
+  // Звёзды
   ctx.save();
-  ctx.shadowColor = '#00f0ff';
-  ctx.shadowBlur = 30;
-  ctx.fillStyle = 'rgba(0,240,255,0.15)';
-  ctx.beginPath();
-  ctx.arc(W * 0.8, H * 0.12, 35, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,240,255,0.4)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
+  for (let i = 0; i < 60; i++) {
+    const sx = ((i * 137 + frameCount * 0.05) % W);
+    const sy = (i * 53) % (groundY * 0.6);
+    const sa = 0.3 + Math.sin(frameCount * 0.02 + i) * 0.2;
+    ctx.globalAlpha = sa;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(sx, sy, 1, 1);
+  }
   ctx.restore();
 
-  // Здания
-  bgLayers.forEach((layer, li) => {
-    layer.buildings.forEach(b => {
-      ctx.fillStyle = b.color;
-      ctx.fillRect(b.x, groundY - b.h, b.w, b.h);
+  // Луна — неоновая
+  ctx.save();
+  ctx.shadowColor = '#00f0ff';
+  ctx.shadowBlur = 40;
+  const moonGrad = ctx.createRadialGradient(W*0.82, H*0.1, 5, W*0.82, H*0.1, 38);
+  moonGrad.addColorStop(0, 'rgba(0,240,255,0.25)');
+  moonGrad.addColorStop(0.6, 'rgba(0,240,255,0.08)');
+  moonGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = moonGrad;
+  ctx.beginPath(); ctx.arc(W*0.82, H*0.1, 38, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = 'rgba(0,240,255,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(W*0.82, H*0.1, 35, 0, Math.PI*2); ctx.stroke();
+  ctx.restore();
 
-      // Окна
-      const winColor = li === 0
-        ? `rgba(0,240,255,${0.2 + Math.random() * 0.1})`
-        : `rgba(255,238,0,${0.3 + Math.random() * 0.1})`;
-      const rows = Math.floor(b.h / 14);
-      const cols = Math.floor(b.w / 10);
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          if (Math.random() > 0.4) {
-            ctx.fillStyle = winColor;
-            ctx.fillRect(b.x + c * 10 + 2, groundY - b.h + r * 14 + 4, 5, 6);
-          }
-        }
-      }
-    });
-  });
+  // Дальние здания
+  if (bgLayers[0]) bgLayers[0].buildings.forEach(b => drawNeonBuilding(b, groundY));
 
-  // Неоновые горизонтальные линии (киберпанк)
+  // Летающие машины (за ближними зданиями)
+  if (bgLayers.flyingCars) bgLayers.flyingCars.forEach(car => drawFlyingCar(car));
+
+  // Ближние здания
+  if (bgLayers[1]) bgLayers[1].buildings.forEach(b => drawNeonBuilding(b, groundY));
+
+  // Неоновые горизонтальные полосы (атмосфера)
   for (let i = 0; i < 3; i++) {
-    const yLine = groundY * (0.5 + i * 0.15);
+    const yLine = groundY * (0.45 + i * 0.18);
+    const col = i % 2 === 0 ? '0,240,255' : '255,0,170';
     const grad = ctx.createLinearGradient(0, 0, W, 0);
     grad.addColorStop(0, 'transparent');
-    grad.addColorStop(0.3, i % 2 === 0 ? 'rgba(0,240,255,0.15)' : 'rgba(255,0,170,0.1)');
-    grad.addColorStop(0.7, i % 2 === 0 ? 'rgba(0,240,255,0.15)' : 'rgba(255,0,170,0.1)');
+    grad.addColorStop(0.25, `rgba(${col},0.12)`);
+    grad.addColorStop(0.75, `rgba(${col},0.12)`);
     grad.addColorStop(1, 'transparent');
     ctx.strokeStyle = grad;
     ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(0, yLine);
-    ctx.lineTo(W, yLine);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, yLine); ctx.lineTo(W, yLine); ctx.stroke();
   }
 
   // Земля
@@ -819,27 +1296,31 @@ function drawBg() {
   ctx.fillStyle = groundGrad;
   ctx.fillRect(0, groundY, W, H - groundY);
 
-  // Линия земли — неон
+  // Линия земли — неон двойная
   ctx.save();
   ctx.shadowColor = '#00f0ff';
-  ctx.shadowBlur = 8;
+  ctx.shadowBlur = 15;
   ctx.strokeStyle = '#00f0ff';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(0, groundY);
-  ctx.lineTo(W, groundY);
-  ctx.stroke();
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(W, groundY); ctx.stroke();
+  ctx.strokeStyle = 'rgba(0,240,255,0.2)';
+  ctx.lineWidth = 8;
+  ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(W, groundY); ctx.stroke();
   ctx.restore();
 
-  // Сетка на земле
-  ctx.strokeStyle = 'rgba(0,240,255,0.08)';
+  // Перспективная сетка на земле
+  ctx.strokeStyle = 'rgba(0,240,255,0.07)';
   ctx.lineWidth = 1;
   const gridOffset = (frameCount * speed * 0.5) % 60;
   for (let x = -gridOffset; x < W; x += 60) {
     ctx.beginPath();
     ctx.moveTo(x, groundY);
-    ctx.lineTo(x + (H - groundY) * 0.3, H);
+    ctx.lineTo(x + (H - groundY) * 0.35, H);
     ctx.stroke();
+  }
+  for (let row = 1; row < 4; row++) {
+    const gy = groundY + (H - groundY) * (row / 4);
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
   }
 }
 
@@ -871,6 +1352,7 @@ function checkCollisions() {
       c.collected = true;
       coinCount++;
       spawnCoinParticles(c.x + c.w/2, c.y + c.h/2);
+      playSound('coin');
       document.getElementById('coins-display').textContent = coinCount;
     }
   }
@@ -879,6 +1361,7 @@ function checkCollisions() {
 function loseLife() {
   lives--;
   spawnHitParticles();
+  playSound('hit');
   cat.invincible = 90;
   updateLivesHUD();
 
@@ -970,6 +1453,11 @@ function gameLoop() {
 //  СТАРТ / СТОП
 // ══════════════════════════════════════════════════════
 function startGame() {
+  // Получаем ник из поля ввода или Telegram
+  const nickInput = document.getElementById('nick-input');
+  const typedNick = nickInput ? nickInput.value.trim() : '';
+  userName = typedNick || tgName || 'RUNNER';
+
   hideAllScreens();
   document.getElementById('screen-game').style.display = 'flex';
 
@@ -1001,11 +1489,14 @@ function startGame() {
 
   createBgLayers();
   gameRunning = true;
+  stopMusic();
+  startMusic();
   gameLoop();
 }
 
 function endGame() {
   gameRunning = false;
+  stopMusic();
   cancelAnimationFrame(animId);
 
   const best = saveScore(score);
@@ -1140,6 +1631,12 @@ setInterval(() => {
 window.addEventListener('load', () => {
   initCanvas();
   if (tg) { tg.ready(); tg.expand(); }
+  // Предзаполняем ник из Telegram
+  const nickInput = document.getElementById('nick-input');
+  if (nickInput && tgName) {
+    nickInput.value = tgName;
+    nickInput.style.display = 'none'; // скрываем если ник уже есть
+  }
 });
 </script>
 </body>

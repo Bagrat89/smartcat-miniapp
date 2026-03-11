@@ -482,75 +482,29 @@ async function loadFeatured() {
   }
 }
 
-// ── ЗАГРУЗКА F-DROID ──
-async function loadFdroid() {
-  const packageIds = [
-    'com.termux',
-    'org.mozilla.fennec_fdroid',
-    'com.nextcloud.client',
-    'org.videolan.vlc',
-    'com.github.libretube',
-    'net.osmand.plus',
-    'org.telegram.messenger',
-    'de.blau.android',
-    'com.ichi2.anki',
-    'org.sufficientlysecure.keychain',
-    'com.kunzisoft.keepass.libre',
-    'me.ccrama.redditslide',
-    'org.schabi.newpipe',
-    'com.aurora.store',
-    'org.fossify.filemanager',
-    'com.simplemobiletools.gallery.pro',
-    'org.fossify.contacts',
-    'com.ghostsq.commander',
+// ── СТАТИЧЕСКИЕ ДАННЫЕ F-DROID ──
+function loadFdroid() {
+  allFdroid = [
+    { id: 'com.termux', name: 'Termux', summary: 'Терминал Linux для Android. Запускай скрипты Python прямо на телефоне.', icon: '💻', url: 'https://f-droid.org/packages/com.termux/', category: 'Утилиты' },
+    { id: 'org.mozilla.fennec_fdroid', name: 'Firefox (F-Droid)', summary: 'Браузер Firefox без трекеров Google. Полная приватность.', icon: '🦊', url: 'https://f-droid.org/packages/org.mozilla.fennec_fdroid/', category: 'Интернет' },
+    { id: 'org.schabi.newpipe', name: 'NewPipe', summary: 'YouTube без рекламы и трекеров. Фоновое воспроизведение и скачивание.', icon: '▶️', url: 'https://f-droid.org/packages/org.schabi.newpipe/', category: 'Медиа' },
+    { id: 'org.videolan.vlc', name: 'VLC', summary: 'Универсальный медиаплеер. Поддерживает все форматы видео и аудио.', icon: '🎬', url: 'https://f-droid.org/packages/org.videolan.vlc/', category: 'Медиа' },
+    { id: 'com.nextcloud.client', name: 'Nextcloud', summary: 'Личное облако. Синхронизация файлов, фото и контактов на своём сервере.', icon: '☁️', url: 'https://f-droid.org/packages/com.nextcloud.client/', category: 'Утилиты' },
+    { id: 'net.osmand.plus', name: 'OsmAnd+', summary: 'Офлайн карты и навигация на основе OpenStreetMap. Без интернета.', icon: '🗺️', url: 'https://f-droid.org/packages/net.osmand.plus/', category: 'Навигация' },
+    { id: 'com.kunzisoft.keepass.libre', name: 'KeePassDX', summary: 'Менеджер паролей с шифрованием AES. Полностью офлайн и open source.', icon: '🔐', url: 'https://f-droid.org/packages/com.kunzisoft.keepass.libre/', category: 'Приватность' },
+    { id: 'com.aurora.store', name: 'Aurora Store', summary: 'Альтернативный клиент Google Play без аккаунта Google.', icon: '🌌', url: 'https://f-droid.org/packages/com.aurora.store/', category: 'Утилиты' },
+    { id: 'com.ichi2.anki', name: 'AnkiDroid', summary: 'Флэш-карточки для запоминания. Алгоритм интервального повторения.', icon: '🃏', url: 'https://f-droid.org/packages/com.ichi2.anki/', category: 'Образование' },
+    { id: 'org.fossify.filemanager', name: 'Fossify Files', summary: 'Файловый менеджер без рекламы и слежки. Чистый и быстрый.', icon: '📁', url: 'https://f-droid.org/packages/org.fossify.filemanager/', category: 'Утилиты' },
+    { id: 'org.fossify.contacts', name: 'Fossify Contacts', summary: 'Контакты без привязки к Google. Локальное хранение и экспорт.', icon: '👤', url: 'https://f-droid.org/packages/org.fossify.contacts/', category: 'Утилиты' },
+    { id: 'com.simplemobiletools.gallery.pro', name: 'Simple Gallery', summary: 'Галерея фото и видео без рекламы. Поддержка RAW и GIF.', icon: '🖼️', url: 'https://f-droid.org/packages/com.simplemobiletools.gallery.pro/', category: 'Медиа' },
+    { id: 'org.sufficientlysecure.keychain', name: 'OpenKeychain', summary: 'PGP шифрование для Android. Подписывай и шифруй файлы и письма.', icon: '🔑', url: 'https://f-droid.org/packages/org.sufficientlysecure.keychain/', category: 'Приватность' },
+    { id: 'de.blau.android', name: 'Vespucci', summary: 'Редактор OpenStreetMap прямо на телефоне. Вноси правки в карты.', icon: '✏️', url: 'https://f-droid.org/packages/de.blau.android/', category: 'Навигация' },
+    { id: 'com.github.libretube', name: 'LibreTube', summary: 'YouTube через Piped API. Без аккаунта, без рекламы, с подписками.', icon: '📺', url: 'https://f-droid.org/packages/com.github.libretube/', category: 'Медиа' },
+    { id: 'com.ghostsq.commander', name: 'Ghost Commander', summary: 'Двухпанельный файловый менеджер. Поддержка FTP, SFTP, SMB.', icon: '👻', url: 'https://f-droid.org/packages/com.ghostsq.commander/', category: 'Утилиты' },
+    { id: 'org.telegram.messenger', name: 'Telegram FOSS', summary: 'Telegram без проприетарных компонентов Google. Полностью open source.', icon: '✈️', url: 'https://f-droid.org/packages/org.telegram.messenger/', category: 'Интернет' },
+    { id: 'me.ccrama.redditslide', name: 'Slide for Reddit', summary: 'Красивый клиент Reddit без рекламы. Материальный дизайн.', icon: '🔴', url: 'https://f-droid.org/packages/me.ccrama.redditslide/', category: 'Интернет' },
   ];
-
-  try {
-    const results = [];
-    // Загружаем пакетами по 6
-    const chunks = [];
-    for (let i = 0; i < packageIds.length; i += 6) {
-      chunks.push(packageIds.slice(i, i + 6));
-    }
-
-    for (const chunk of chunks) {
-      const promises = chunk.map(async (pkg) => {
-        try {
-          const res = await fetch(`https://f-droid.org/api/v1/packages/${pkg}`);
-          if (!res.ok) return null;
-          const data = await res.json();
-          return {
-            id: pkg,
-            name: data.name || pkg.split('.').pop(),
-            summary: data.summary || '',
-            icon: `https://f-droid.org/repo/icons-640/${pkg}.${data.suggestedVersionCode || '0'}.png`,
-            url: `https://f-droid.org/packages/${pkg}/`,
-            version: data.suggestedVersionName || '',
-            category: mapFdroidCategory(data.categories || [])
-          };
-        } catch { return null; }
-      });
-      const res = await Promise.all(promises);
-      results.push(...res.filter(Boolean));
-    }
-
-    allFdroid = results;
-    renderFdroid();
-  } catch (e) {
-    document.getElementById('fdroid-list').innerHTML =
-      '<div class="error-msg" style="grid-column:1/-1">Не удалось загрузить F-Droid</div>';
-  }
-}
-
-function mapFdroidCategory(cats) {
-  if (!cats.length) return 'Утилиты';
-  const c = cats[0].toLowerCase();
-  if (c.includes('internet') || c.includes('network')) return 'Интернет';
-  if (c.includes('security') || c.includes('privacy')) return 'Приватность';
-  if (c.includes('multimedia') || c.includes('video')) return 'Медиа';
-  if (c.includes('navigation')) return 'Навигация';
-  if (c.includes('education')) return 'Образование';
-  return 'Утилиты';
+  renderFdroid();
 }
 
 // ── РЕНДЕР ИЗБРАННЫХ ──
@@ -637,9 +591,7 @@ function renderFdroid() {
 
   list.innerHTML = apps.map(app => `
     <div class="fdroid-card" onclick="openApp('${app.url}')">
-      <img class="fdroid-icon" src="${app.icon}" alt="${app.name}"
-        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="fdroid-icon-placeholder" style="display:none">📦</div>
+      <div class="fdroid-icon-placeholder">${app.icon || '📦'}</div>
       <div class="fdroid-name">${app.name}</div>
       <div class="fdroid-summary">${app.summary || 'Open source приложение'}</div>
       <div class="fdroid-dl-btn">↓ F-DROID</div>
