@@ -25,7 +25,7 @@
       gap: 4px;
     }
 
-    /* ── BANNER ── */
+    /* Banner */
     .banner {
       position: relative;
       width: 100%;
@@ -41,75 +41,199 @@
       background-size: cover;
       background-position: center;
     }
+
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      padding: 12px 0;
+      color: #00f0ff;
+    }
+
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .btn {
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:active {
+      background: rgba(0,240,255,0.2);
+      transform: scale(0.97);
+    }
+
+    .btn-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .emoji {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .btn-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    .page {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .page.active {
+      display: flex;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- Здесь был твой баннер и остальной контент, я оставил его без изменений -->
+  <!-- Главное меню -->
+  <div id="main-menu" class="page active">
+    <div class="title">Main Menu</div>
+    <div class="buttons-grid">
 
-    <!-- Особые функции (без Автоматического заработка) -->
-    <div id="special-features" class="page">
-      <div class="title">Особые функции</div>
-      <div class="buttons-grid">
-
-        <div class="btn" data-action="feature-img-gen">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">🎨</span>
-            <span class="btn-label" style="color:#00f0ff;">Генерация фото по тексту</span>
-          </div>
+      <div class="btn" data-action="open-chat">
+        <div class="btn-content">
+          <span class="emoji">💬</span>
+          <span class="btn-label">ИИ ассистент Алиса</span>
         </div>
+      </div>
 
-        <div class="btn" data-action="feature-photo-editor">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">✂️</span>
-            <span class="btn-label" style="color:#00f0ff;">Редактор фото</span>
-          </div>
+      <div class="btn" data-action="special-features">
+        <div class="btn-content">
+          <span class="emoji">⚡</span>
+          <span class="btn-label">Особые функции</span>
         </div>
+      </div>
 
-        <div class="btn" data-action="feature-ocr">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">🔍</span>
-            <span class="btn-label" style="color:#00f0ff;">Анализ фото / OCR</span>
-          </div>
+      <div class="btn" data-action="apk-apps">
+        <div class="btn-content">
+          <span class="emoji">📱</span>
+          <span class="btn-label">APK приложения</span>
         </div>
+      </div>
 
-        <div class="btn" data-action="feature-video">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">🎥</span>
-            <span class="btn-label" style="color:#00f0ff;">Скачать видео (YouTube / TikTok)</span>
-          </div>
+      <div class="btn" data-action="web-game">
+        <div class="btn-content">
+          <span class="emoji">🎮</span>
+          <span class="btn-label">Веб игра</span>
         </div>
+      </div>
 
-        <div class="btn" data-action="feature-pdf">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">📄</span>
-            <span class="btn-label" style="color:#00f0ff;">Конвертер файлов</span>
-          </div>
+      <div class="btn" data-action="market">
+        <div class="btn-content">
+          <span class="emoji">🛒</span>
+          <span class="btn-label">Маркет</span>
         </div>
+      </div>
 
-        <div class="btn" data-action="feature-summarize">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">📰</span>
-            <span class="btn-label" style="color:#00f0ff;">Суммаризация статьи по ссылке</span>
-          </div>
+      <div class="btn" data-action="neuro-stickers">
+        <div class="btn-content">
+          <span class="emoji">🖼️</span>
+          <span class="btn-label">Нейро-стикеры</span>
         </div>
+      </div>
 
-        <div class="btn" data-action="back">
-          <div class="btn-content">
-            <span style="font-size:22px;margin-bottom:3px;">←</span>
-            <span class="btn-label" style="color:#00f0ff;">Назад</span>
-          </div>
+      <div class="btn" data-action="socials">
+        <div class="btn-content">
+          <span class="emoji">🌐</span>
+          <span class="btn-label">Наши соцсети</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="donate">
+        <div class="btn-content">
+          <span class="emoji">🐱</span>
+          <span class="btn-label">На Кибервискас</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Особые функции (без Автоматического заработка) -->
+  <div id="special-features" class="page">
+    <div class="title">Особые функции</div>
+    <div class="buttons-grid">
+
+      <div class="btn" data-action="feature-img-gen">
+        <div class="btn-content">
+          <span class="emoji">🎨</span>
+          <span class="btn-label">Генерация фото по тексту</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="feature-photo-editor">
+        <div class="btn-content">
+          <span class="emoji">✂️</span>
+          <span class="btn-label">Редактор фото</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="feature-ocr">
+        <div class="btn-content">
+          <span class="emoji">🔍</span>
+          <span class="btn-label">Анализ фото / OCR</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="feature-video">
+        <div class="btn-content">
+          <span class="emoji">🎥</span>
+          <span class="btn-label">Скачать видео (YouTube/TikTok)</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="feature-pdf">
+        <div class="btn-content">
+          <span class="emoji">📄</span>
+          <span class="btn-label">Конвертер файлов</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="feature-summarize">
+        <div class="btn-content">
+          <span class="emoji">📰</span>
+          <span class="btn-label">Суммаризация статьи по ссылке</span>
+        </div>
+      </div>
+
+      <div class="btn" data-action="back">
+        <div class="btn-content">
+          <span class="emoji">←</span>
+          <span class="btn-label">Назад</span>
         </div>
       </div>
     </div>
-
-    <!-- Все остальные страницы (market, services, payment, partners, socials, donate, smarthome, crypto, diary, qr, translator) остаются без изменений -->
-
-    <!-- ... твой остальной код страниц ... -->
-
   </div>
+
+  <!-- Остальные страницы (market, services, payment, partners, socials, donate, smarthome, crypto, diary, qr, translator) остаются как были -->
+
+  <!-- ... твой остальной код страниц (market, payment и т.д.) можно оставить как есть ... -->
+
+</div>
 
 <script type="module" src="./app/index.js"></script>
 </body>
